@@ -1,4 +1,3 @@
-/* ===== GLOBAL RESET ===== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -93,7 +92,6 @@ body {
     font-size: 14px;
 }
 
-/* Specific inputs */
 .search-input {
     width: 250px;
     margin-right: 10px;
@@ -163,7 +161,6 @@ body {
     font-weight: bold;
 }
 
-/* ===== INPUT FOCUS ===== */
 input:focus {
     outline: none;
     border-color: #486480;
