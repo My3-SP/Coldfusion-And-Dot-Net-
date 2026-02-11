@@ -131,7 +131,7 @@ BEGIN
     FROM Customer
     WHERE Email = @Email
       AND (@CustomerID IS NULL OR CustomerID != @CustomerID);
-END
+END;
 
 
 
@@ -224,5 +224,4 @@ BEGIN
     WHERE ProductName = @ProductName
       AND Price = @Price
       
-END
-
+END;
