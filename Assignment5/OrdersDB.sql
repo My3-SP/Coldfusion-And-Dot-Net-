@@ -48,8 +48,8 @@ SELECT * FROM Product;
 -- insert operation
 CREATE PROCEDURE sp_InsertCustomer
 (
-    @CustomerName VARCHAR(100),
-    @Email        VARCHAR(100),
+    @CustomerName VARCHAR(50),
+    @Email        VARCHAR(50),
     @PhoneNo      VARCHAR(15)
 )
 AS
@@ -62,8 +62,8 @@ END;
 CREATE PROCEDURE sp_UpdateCustomer
 (
     @CustomerID   INT,
-    @CustomerName VARCHAR(100),
-    @Email        VARCHAR(100),
+    @CustomerName VARCHAR(50),
+    @Email        VARCHAR(50),
     @PhoneNo      VARCHAR(15)
 )
 AS
@@ -99,7 +99,6 @@ BEGIN
     DELETE FROM Customer
     WHERE customerID=@CustomerID
 END;
-DROP PROCEDURE sp_DeleteCustomer
 
 --display table
 CREATE PROCEDURE sp_SelectCustomer
@@ -122,19 +121,20 @@ BEGIN
        OR Email LIKE '%' + @SearchTerm + '%';
 END;
 
--- check for adding new member already present
+-- check for adding/update new member(email) already present
 CREATE PROCEDURE sp_CheckCustomerExists
-    @CustomerName VARCHAR(100),
-    @Email VARCHAR(100),
-    @PhoneNo VARCHAR(15)
+    @Email VARCHAR(50),
+    @CustomerID INT = NULL
 AS
 BEGIN
-    SELECT CustomerID 
+    SELECT CustomerID
     FROM Customer
-    WHERE CustomerName = @CustomerName
-      AND Email = @Email
-      AND PhoneNo = @PhoneNo
+    WHERE Email = @Email
+      AND (@CustomerID IS NULL OR CustomerID != @CustomerID);
 END
+
+
+
 
 
 -------------------------------------------------------
@@ -142,7 +142,7 @@ END
 -- insert operation
 CREATE PROCEDURE sp_InsertProduct
 (
-    @ProductName VARCHAR(100),
+    @ProductName VARCHAR(50),
     @Price DECIMAL(10,2)
 )
 AS
@@ -155,7 +155,7 @@ END;
 CREATE PROCEDURE sp_UpdateProduct
 (
     @ProductID INT,
-    @ProductName VARCHAR(100),
+    @ProductName VARCHAR(50),
     @Price DECIMAL(10,2)
 )
 AS
@@ -172,8 +172,6 @@ CREATE PROCEDURE sp_GetProductById
 )
 AS
 BEGIN
-    SET NOCOUNT ON;
-
     SELECT 
         ProductID,
         ProductName,
@@ -205,7 +203,7 @@ END;
 --search box operation
 CREATE PROCEDURE sp_SearchProduct
 (
-    @ProductName VARCHAR(100)
+    @ProductName VARCHAR(50)
 )
 AS
 BEGIN
@@ -217,7 +215,7 @@ END;
 
 -- check for adding new member already present
 CREATE PROCEDURE sp_CheckProductExists
-    @ProductName VARCHAR(100),
+    @ProductName VARCHAR(50),
     @Price DECIMAL(10,2)
 AS
 BEGIN
