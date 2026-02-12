@@ -141,8 +141,11 @@
             <!-- SEARCH + ADD -->
             <div class="search-add">
                 <form method="post" id="searchForm">
-                    <input type="text" name="searchText" class="input-box search-input" placeholder="Search by name or email"
-                          value="#structKeyExists(form,'searchText') ? form.searchText : ''#">
+                    <input type="text"
+                        name="searchText"
+                        class="input-box search-input"
+                        placeholder="Search by name or email"
+                        value="#structKeyExists(form,'searchText') ? form.searchText : ''#">
 
                     <button type="submit" name="search" class="btn">Search</button>
                     <button type="button" class="btn"
@@ -187,14 +190,16 @@
 
                     <div>
                         <label class="form-label">Email:</label>
-                        <input type="text" name="Email" id="Email" class="input-box" required>
+                        <input type="text" name="Email" id="Email"
+                            class="input-box" required>
                     </div>
 
                     <br>
 
                     <div>
                     <label class="form-label">Phone:</label>
-                    <input type="text" name="PhoneNo" id="PhoneNo" class="input-box" required>
+                    <input type="text" name="PhoneNo" id="PhoneNo"
+                        class="input-box" required>
                     </div>
 
                     <br>
@@ -219,17 +224,17 @@
                 <cfloop query="qCustomer">
                     <tr>
                         <td>#sl#</td>
-                        <td>#CustomerName#</td>
-                        <td>#Email#</td>
-                        <td>#PhoneNo#</td>
+                        <td>#qCustomer.CustomerName#</td>
+                        <td>#qCustomer.Email#</td>
+                        <td>#qCustomer.PhoneNo#</td>
                         <td class="actions-cell">
                             <button type="button" class="btn"
-                                    onclick="editCustomer('#CustomerID#','#CustomerName#','#Email#','#PhoneNo#')">
+                                    onclick="editCustomer('#qCustomer.CustomerID#','#qCustomer.CustomerName#','#qCustomer.Email#','#qCustomer.PhoneNo#')">
                             Edit
                             </button>
 
                             <button type="button" class="btn"
-                                    onclick="deleteCustomer(#CustomerID#)"> Delete
+                                    onclick="deleteCustomer(#qCustomer.CustomerID#)"> Delete
                             </button>
 
                         </td>
@@ -244,4 +249,3 @@
         </cfoutput>
     </body>
 </html>
-
