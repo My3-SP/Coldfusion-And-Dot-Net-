@@ -1,11 +1,7 @@
-<cfparam name="errorMsg" default="">
+<cfparam name="productErrorMsg" default="">
+<cfparam name="SearchErrorMsg" default="">
 
-<!-- ===== RESET ===== -->
-<cfif structKeyExists(form,"reset")>
-    <cflocation url="product_crud.cfm" addtoken="false">
-</cfif>
-
-<!-- ===== DELETE ===== -->
+<!-- ================= DELETE ================= -->
 <cfif structKeyExists(form,"deleteID") AND isNumeric(form.deleteID)>
     <cfstoredproc procedure="sp_DeleteProduct" datasource="ordersdsn">
         <cfprocparam value="#form.deleteID#" cfsqltype="cf_sql_integer">
@@ -13,48 +9,43 @@
     <cflocation url="product_crud.cfm" addtoken="false">
 </cfif>
 
-<!-- ===== SAVE (INSERT / UPDATE) ===== -->
+<!-- ================= SAVE ================= -->
 <cfif structKeyExists(form,"save")>
 
-    <!-- Product Name validation -->
-    <cfif NOT reFind("^(?=.*[A-Za-z0-9])[A-Za-z0-9 \-\_\.\(\)/]+$", trim(form.ProductName))>
-        <cfset errorMsg = "Invalid product name. Only letters, numbers, spaces, and - _ . ( ) / are allowed.">
+    <!-- Validation -->
+    <cfif NOT reFind("^(?=.*[A-Za-z])[A-Za-z0-9 \-_()./]+$", trim(form.ProductName))>
+        <cfset productErrorMsg = "Product name must contain at least one letter and can include numbers.">
     </cfif>
 
-    <!-- Price validation -->
-    <cfif NOT len(errorMsg) AND (NOT isNumeric(form.Price) OR form.Price LTE 0)>
-        <cfset errorMsg = "Price must be a positive number.">
+    <cfif NOT len(productErrorMsg) AND (NOT isNumeric(form.Price) OR form.Price LTE 0)>
+        <cfset productErrorMsg = "Price must be positive number.">
     </cfif>
 
-    <!-- Duplicate check -->
-    <cfif NOT len(errorMsg)>
+    <!-- Duplicate Check -->
+    <cfif NOT len(productErrorMsg)>
         <cfstoredproc procedure="sp_CheckProductExists" datasource="ordersdsn">
-            <cfprocparam dbvarname="@ProductName"
-                         value="#trim(form.ProductName)#"
-                         cfsqltype="cf_sql_varchar">
-            <cfprocparam dbvarname="@Price"
-                         value="#form.Price#"
-                         cfsqltype="cf_sql_decimal">
+            <cfprocparam value="#trim(form.ProductName)#" cfsqltype="cf_sql_varchar">
+            <cfprocparam value="#form.Price#" cfsqltype="cf_sql_decimal">
+            <cfprocparam value="#structKeyExists(form,'ProductID') ? form.ProductID : ''#"
+                         cfsqltype="cf_sql_integer"
+                         null="#NOT structKeyExists(form,'ProductID')#">
             <cfprocresult name="qExists">
         </cfstoredproc>
 
-        <cfif qExists.recordcount AND
-              (NOT structKeyExists(form,"ProductID") OR qExists.ProductID NEQ form.ProductID)>
-            <cfset errorMsg = "Product with the same Name and Price already exists!">
+        <cfif qExists.recordcount>
+            <cfset productErrorMsg = "Product already exists with same price.">
         </cfif>
     </cfif>
 
-    <!-- Insert or Update -->
-    <cfif NOT len(errorMsg)>
+    <!-- Insert / Update -->
+    <cfif NOT len(productErrorMsg)>
         <cfif structKeyExists(form,"ProductID") AND isNumeric(form.ProductID)>
-            <!-- UPDATE -->
             <cfstoredproc procedure="sp_UpdateProduct" datasource="ordersdsn">
                 <cfprocparam value="#form.ProductID#" cfsqltype="cf_sql_integer">
                 <cfprocparam value="#trim(form.ProductName)#" cfsqltype="cf_sql_varchar">
                 <cfprocparam value="#form.Price#" cfsqltype="cf_sql_decimal">
             </cfstoredproc>
         <cfelse>
-            <!-- INSERT -->
             <cfstoredproc procedure="sp_InsertProduct" datasource="ordersdsn">
                 <cfprocparam value="#trim(form.ProductName)#" cfsqltype="cf_sql_varchar">
                 <cfprocparam value="#form.Price#" cfsqltype="cf_sql_decimal">
@@ -66,104 +57,136 @@
 
 </cfif>
 
-<!-- ========================= DATA FETCHING ========================= -->
+<!-- ================= SEARCH ================= -->
+<cfif structKeyExists(form,"search")>
+    <cfset searchValue = trim(form.searchText)>
+    <!-- Validation -->
+    <cfif NOT len(searchValue)>
+        <cfset SearchErrorMsg = "Search text cannot be empty or spaces only.">
+    <cfelseif NOT reFind("^(?=.*[A-Za-z0-9])[A-Za-z0-9 \-_()./]+$", searchValue)>
+        <cfset SearchErrorMsg = "Search must contain at least one letter or number.">
+    </cfif>
 
-<!-- Search / Select -->
-<cfif structKeyExists(form,"search") AND len(trim(form.searchText))>
-    <cfstoredproc procedure="sp_SearchProduct" datasource="ordersdsn">
-        <cfprocparam value="#trim(form.searchText)#" cfsqltype="cf_sql_varchar">
-        <cfprocresult name="qProduct">
-    </cfstoredproc>
+    <!-- If valid, perform search -->
+    <cfif NOT len(SearchErrorMsg)>
+        <cfstoredproc procedure="sp_SearchProduct" datasource="ordersdsn">
+            <cfprocparam value="#searchValue#" cfsqltype="cf_sql_varchar">
+            <cfprocresult name="qProduct">
+        </cfstoredproc>
+    <cfelse>
+        <cfstoredproc procedure="sp_SelectProduct" datasource="ordersdsn">
+            <cfprocresult name="qProduct">
+        </cfstoredproc>
+    </cfif>
 <cfelse>
-    <cfstoredproc procedure="sp_SelectProduct" datasource="ordersdsn">
-        <cfprocresult name="qProduct">
-    </cfstoredproc>
+        <cfstoredproc procedure="sp_SelectProduct" datasource="ordersdsn">
+            <cfprocresult name="qProduct">
+        </cfstoredproc>
 </cfif>
 
-<!-- Load Edit Data -->
-<cfif structKeyExists(form,"editID") AND isNumeric(form.editID)>
-    <cfstoredproc procedure="sp_GetProductById" datasource="ordersdsn">
-        <cfprocparam value="#form.editID#" cfsqltype="cf_sql_integer">
-        <cfprocresult name="qEdit">
-    </cfstoredproc>
-</cfif>
-
-<!-- ========================= HTML ========================= -->
 
 <html>
     <head>
         <title>Product Records</title>
         <link rel="stylesheet" href="style.css">
-    </head>
 
+        <script>
+            function showAddForm(){
+                document.getElementById("formTitle").innerText = "Add New Product";
+                document.getElementById("ProductID").value = "";
+                document.getElementById("ProductName").value = "";
+                document.getElementById("Price").value = "";
+                document.getElementById("productFormContainer").style.display = "block";
+            }
+
+            function editProduct(id,name,price){
+                document.getElementById("formTitle").innerText = "Edit Product";
+                document.getElementById("ProductID").value = id;
+                document.getElementById("ProductName").value = name;
+                document.getElementById("Price").value = price;
+                document.getElementById("productFormContainer").style.display = "block";
+            }
+
+            function deleteProduct(id){
+                if(confirm("Delete this product?")){
+                    document.getElementById("deleteID").value = id;
+                    document.getElementById("deleteForm").submit();
+                }
+            }
+
+            function hideForm(){
+                document.getElementById("productFormContainer").style.display = "none";
+            }
+        </script>
+    </head>
     <body>
         <cfoutput>
             <div class="container">
+                <h2 class="page-title">Product Records - CRUD Operations</h2>
 
-                <h2 class="page-title">Product Records - CRUD OPERATIONS</h2>
+                <!-- SEARCH + ADD SECTION -->
+                <div class="search-add">
 
-                <!-- ===== SEARCH BAR ===== -->
-                <form method="post" class="search-add">
-                    <input type="text" name="searchText" class="input-box search-input" placeholder="Search by product name"
-                        value="#form.searchText ?: ''#">
+                    <form method="post" id="searchForm">
 
-                    <button type="submit" name="search" class="btn search-btn">Search</button>
-                    <button type="submit" name="reset" class="btn reset-btn">Reset</button>
+                        <input type="text" name="searchText" class="input-box search-input"
+                            placeholder="Search by product name"
+                            value="#structKeyExists(form,'searchText') ? form.searchText : ''#">
+
+                        <button type="submit" name="search" class="btn">Search</button>
+                        <button type="button" class="btn"
+                                onclick="window.location='product_crud.cfm'">Reset</button>
+                    </form>
+                    <button type="button" class="btn"
+                                onclick="showAddForm()">Add New Product</button>
+                </div>
+                <form method="post" id="deleteForm">
+                    <input type="hidden" name="deleteID" id="deleteID">
                 </form>
 
-                <!-- ===== ERROR MESSAGE (BELOW SEARCH BAR) ===== -->
-                <cfif len(errorMsg)>
-                    <div class="error">
-                        #errorMsg#
-                    </div>
+                <!-- ERROR MESSAGE -->
+                <cfif len(SearchErrorMsg)>
+                    <div class="error">#SearchErrorMsg#</div>
                 </cfif>
-
-                <!-- ===== ADD BUTTON ===== -->
-                <cfif NOT structKeyExists(form,"editID") AND NOT structKeyExists(form,"addNew")>
-                    <form method="post">
-                        <button type="submit" name="addNew" class="btn add-btn">Add New Product</button>
-                    </form>
+                <cfif len(productErrorMsg)>
+                    <div class="error">#productErrorMsg#</div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function(){
+                            document.getElementById("productFormContainer").style.display = "block";
+                        });
+                    </script>
                 </cfif>
-                <br>
                 <p class="nav">
                     <a href="customer_crud.cfm" class="button">Go to Customer Records</a>
                 </p>
 
-                <!-- ===== ADD / EDIT FORM ===== -->
-                <cfif structKeyExists(form,"addNew") OR structKeyExists(form,"editID")>
+                <!-- TOGGLE ADD / EDIT FORM -->
+                <div id="productFormContainer" class="product-form" style="display:none;">
 
-                    <h3 class="form-title">
-                        #structKeyExists(form,"editID") ? "Edit Product" : "Add New Product"#
-                    </h3>
+                    <h3 class="form-title" id="formTitle">Add New Product</h3>
+                    <form method="post">
+                        <input type="hidden" name="ProductID" id="ProductID"
+                            value="#structKeyExists(form,'ProductID') ? form.ProductID : ''#">
 
-                    <form method="post" class="product-form">
-
-                        <cfif structKeyExists(form,"editID")>
-                            <input type="hidden" name="ProductID" value="#qEdit.ProductID#">
-                        </cfif>
-
-                        <label class="form-label">Product Name:</label>
-                        <input type="text" name="ProductName" class="input-box" required
-                            value="#structKeyExists(form,'editID') ? qEdit.ProductName : ''#">
-                        <br><br>
-
-                        <label class="form-label">Price:</label>
-                        <input type="text" name="Price" class="input-box" required
-                            value="#structKeyExists(form,'editID') ? qEdit.Price : ''#">
-                        <br><br>
-
-                        <button type="submit" name="save" class="btn save-btn">
-                            #structKeyExists(form,"editID") ? "Update" : "Insert"#
-                        </button>
-
-                        <cfif structKeyExists(form,"editID")>
-                            <button type="submit" name="cancel" class="btn cancel-btn">Cancel</button>
-                        </cfif>
-
+                        <div>
+                            <label class="form-label">Product Name:</label>
+                            <input type="text" name="ProductName" id="ProductName" class="input-box" required
+                                value="#structKeyExists(form,'ProductName') ? form.ProductName : ''#">
+                        </div>
+                        <br>
+                        <div>
+                            <label class="form-label">Price:</label>
+                            <input type="text"
+                                name="Price" id="Price" class="input-box" required
+                                value="#structKeyExists(form,'Price') ? form.Price : ''#">
+                        </div>
+                        <br>
+                        <button type="submit" name="save" class="btn">Save</button>
+                        <button type="button" onclick="hideForm()" class="btn">Cancel</button>
                     </form>
-                </cfif>
+                </div>
 
-                <!-- ===== PRODUCT TABLE ===== -->
+                <!-- PRODUCT TABLE -->
                 <table class="product-table">
 
                     <tr>
@@ -181,25 +204,27 @@
                             <td>#Price#</td>
                             <td class="actions-cell">
 
-                                <form method="post" class="inline-form">
-                                    <input type="hidden" name="editID" value="#ProductID#">
-                                    <button type="submit" class="btn edit-btn">Edit</button>
-                                </form>
+                                <button type="button" class="btn"
+                                        onclick="editProduct('#ProductID#',
+                                                            '#ProductName#',
+                                                            '#Price#')">
+                                    Edit
+                                </button>
 
-                                <form method="post" class="inline-form">
-                                    <input type="hidden" name="deleteID" value="#ProductID#">
-                                    <button type="submit" class="btn delete-btn"
-                                            onclick="return confirm('Delete this product?')">
-                                        Delete
-                                    </button>
-                                </form>
+                                <button type="button" class="btn"
+                                        onclick="deleteProduct(#ProductID#)">
+                                    Delete
+                                </button>
+
                             </td>
                         </tr>
                         <cfset sl++>
                     </cfloop>
+
                 </table>
 
             </div>
+
         </cfoutput>
     </body>
 </html>
