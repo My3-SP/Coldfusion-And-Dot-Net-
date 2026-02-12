@@ -141,11 +141,8 @@
             <!-- SEARCH + ADD -->
             <div class="search-add">
                 <form method="post" id="searchForm">
-                    <input type="text"
-                        name="searchText"
-                        class="input-box search-input"
-                        placeholder="Search by name or email"
-                        value="#structKeyExists(form,'searchText') ? form.searchText : ''#">
+                    <input type="text" name="searchText" class="input-box search-input" placeholder="Search by name or email"
+                          value="#structKeyExists(form,'searchText') ? form.searchText : ''#">
 
                     <button type="submit" name="search" class="btn">Search</button>
                     <button type="button" class="btn"
@@ -190,16 +187,14 @@
 
                     <div>
                         <label class="form-label">Email:</label>
-                        <input type="text" name="Email" id="Email"
-                            class="input-box" required>
+                        <input type="text" name="Email" id="Email" class="input-box" required>
                     </div>
 
                     <br>
 
                     <div>
                     <label class="form-label">Phone:</label>
-                    <input type="text" name="PhoneNo" id="PhoneNo"
-                        class="input-box" required>
+                    <input type="text" name="PhoneNo" id="PhoneNo" class="input-box" required>
                     </div>
 
                     <br>
@@ -249,3 +244,4 @@
         </cfoutput>
     </body>
 </html>
+
