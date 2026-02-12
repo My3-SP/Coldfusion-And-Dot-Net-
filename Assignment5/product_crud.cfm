@@ -170,14 +170,21 @@
 
                         <div>
                             <label class="form-label">Product Name:</label>
-                            <input type="text" name="ProductName" id="ProductName" class="input-box" required
+                            <input type="text"
+                                name="ProductName"
+                                id="ProductName"
+                                class="input-box"
+                                required
                                 value="#structKeyExists(form,'ProductName') ? form.ProductName : ''#">
                         </div>
                         <br>
                         <div>
                             <label class="form-label">Price:</label>
                             <input type="text"
-                                name="Price" id="Price" class="input-box" required
+                                name="Price"
+                                id="Price"
+                                class="input-box"
+                                required
                                 value="#structKeyExists(form,'Price') ? form.Price : ''#">
                         </div>
                         <br>
@@ -200,19 +207,19 @@
                     <cfloop query="qProduct">
                         <tr>
                             <td>#sl#</td>
-                            <td>#ProductName#</td>
-                            <td>#Price#</td>
+                            <td>#qProduct.ProductName#</td>
+                            <td>#qProduct.Price#</td>
                             <td class="actions-cell">
 
                                 <button type="button" class="btn"
-                                        onclick="editProduct('#ProductID#',
-                                                            '#ProductName#',
-                                                            '#Price#')">
+                                        onclick="editProduct('#qProduct.ProductID#',
+                                                            '#qProduct.ProductName#',
+                                                            '#qProduct.Price#')">
                                     Edit
                                 </button>
 
                                 <button type="button" class="btn"
-                                        onclick="deleteProduct(#ProductID#)">
+                                        onclick="deleteProduct(#qProduct.ProductID#)">
                                     Delete
                                 </button>
 
