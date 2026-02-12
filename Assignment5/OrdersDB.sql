@@ -216,12 +216,14 @@ END;
 -- check for adding new member already present
 CREATE PROCEDURE sp_CheckProductExists
     @ProductName VARCHAR(50),
-    @Price DECIMAL(10,2)
+    @Price DECIMAL(10,2),
+    @ProductID INT = NULL
 AS
 BEGIN
     SELECT ProductID
     FROM Product
     WHERE ProductName = @ProductName
       AND Price = @Price
-      
+      AND (@ProductID IS NULL OR ProductID != @ProductID);
 END;
+
