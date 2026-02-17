@@ -1,0 +1,89 @@
+body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: #d2d7db;
+    padding: 20px;
+}
+
+.container {
+    width: 55%;
+    text-align: center;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin: 30px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #0a1b3b;
+}
+h2 {
+    text-align: center;
+    color: #1b3a74;
+}
+.inputBox {
+    width: 30%;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+select {
+    text-align: center;
+    width: 40%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.button,
+.submitButton,
+.calcButtons button {
+    display: inline-block;
+    padding: 9px 10px;
+    margin: 5px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #9586a1;
+    color: white;
+    cursor: pointer;
+    text-decoration: none; 
+    transition: background-color 0.1s ease-in-out;
+}
+
+.resultbox {
+    width: 55%;
+    text-align: center;
+    background-color: #f5f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 30px auto;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: #ccc;
+    margin: 15px 0;
+}
+
+.calcDisplay {
+    width: 250px;   
+    height: 45px;
+    font-size: 18px;
+    text-align: right;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #888;
+}
+
+.calcButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
