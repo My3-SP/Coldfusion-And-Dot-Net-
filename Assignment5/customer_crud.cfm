@@ -1,30 +1,64 @@
 <cfparam name="customerErrorMsg" default="">
 <cfparam name="SearchErrorMsg" default="">
 
+<!-- ================= ENCRYPTION KEY ================= -->
+<cfset encryptionKey = "MySecretKey123456789012345678iuh">
+<cfset decryptedID = "">
+
+<!-- ================= SAFE DECRYPT ================= -->
+<cffunction name="safeDecrypt" returntype="string">
+    <cfargument name="value" required="true">
+    <cftry>
+        <cfreturn decrypt(arguments.value, encryptionKey, "AES/CBC/PKCS5Padding", "Base64")>
+        <cfcatch>
+            <cfreturn "">
+        </cfcatch>
+    </cftry>
+</cffunction>
+
+<!-- ================= SAFE ENCRYPT ================= -->
+<cffunction name="safeEncrypt" returntype="string">
+    <cfargument name="value" required="true">
+    <cfreturn encrypt(arguments.value, encryptionKey, "AES/CBC/PKCS5Padding", "Base64")>
+</cffunction>
+
+<!-- ================= HANDLE URL ID ================= -->
+<cfif structKeyExists(url,"id") AND len(url.id)>
+    <cfif url.id EQ "0">
+        <cfset decryptedID = "0">
+    <cfelse>
+        <cfset decryptedID = safeDecrypt(url.id)>
+    </cfif>
+</cfif>
+
 <!-- ================= DELETE ================= -->
-<cfif structKeyExists(form,"deleteID") AND isNumeric(form.deleteID)>
-    <cfstoredproc procedure="sp_DeleteCustomer" datasource="ordersdsn">
-        <cfprocparam value="#form.deleteID#" cfsqltype="cf_sql_integer">
-    </cfstoredproc>
-    <cflocation url="customer_crud.cfm?msg=deleted" addtoken="no">
+<cfif structKeyExists(form,"deleteID") AND len(form.deleteID)>
+    <cfset realID = safeDecrypt(form.deleteID)>
+    <cfif isNumeric(realID)>
+        <cfstoredproc procedure="sp_DeleteCustomer" datasource="ordersdsn">
+            <cfprocparam value="#realID#" cfsqltype="cf_sql_integer">
+        </cfstoredproc>
+        <cflocation url="customer_crud.cfm?msg=deleted" addtoken="no">
+    </cfif>
 </cfif>
 
 <!-- ================= SAVE ================= -->
 <cfif structKeyExists(form,"CustomerName")>
+
     <cfset cleanName  = trim(form.CustomerName)>
     <cfset cleanEmail = trim(form.Email)>
     <cfset cleanPhone = trim(form.PhoneNo)>
 
+    <!-- VALIDATION -->
     <cfif len(cleanName) LT 2 OR NOT reFind("^[A-Za-z ]+$", cleanName)>
         <cfset customerErrorMsg = "Customer name must contain only alphabets and be at least 2 characters.">
-
     <cfelseif NOT reFind("^[0-9]{10,15}$", cleanPhone)>
         <cfset customerErrorMsg = "Phone number must be 10-15 digits.">
-
     <cfelseif NOT reFind("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", cleanEmail)>
         <cfset customerErrorMsg = "Invalid email format.">
     </cfif>
 
+    <!-- CHECK DUPLICATE -->
     <cfif NOT len(customerErrorMsg)>
         <cfstoredproc procedure="sp_CheckCustomerExists" datasource="ordersdsn">
             <cfprocparam value="#cleanEmail#" cfsqltype="cf_sql_varchar">
@@ -39,9 +73,9 @@
         </cfif>
     </cfif>
 
-    <!-- Insert / Update -->
+    <!-- INSERT / UPDATE -->
     <cfif NOT len(customerErrorMsg)>
-        <cfif structKeyExists(form,"CustomerID") AND form.CustomerID NEQ 0>
+        <cfif structKeyExists(form,"CustomerID") AND len(form.CustomerID)>
             <cfstoredproc procedure="sp_UpdateCustomer" datasource="ordersdsn">
                 <cfprocparam value="#form.CustomerID#" cfsqltype="cf_sql_integer">
                 <cfprocparam value="#cleanName#" cfsqltype="cf_sql_varchar">
@@ -64,14 +98,12 @@
 <cfif structKeyExists(form,"search")>
     <cfset searchValue = trim(form.searchText)>
 
-    <!-- Validation -->
     <cfif NOT len(searchValue)>
         <cfset SearchErrorMsg = "Search cannot be empty.">
     <cfelseif NOT reFind("^(?=.*[A-Za-z0-9])[A-Za-z0-9@._\- ]+$", searchValue)>
         <cfset SearchErrorMsg = "Invalid search text.">
     </cfif>
 
-    <!-- Fetch Customers -->
     <cfif NOT len(SearchErrorMsg)>
         <cfstoredproc procedure="sp_SearchCustomer" datasource="ordersdsn">
             <cfprocparam value="#searchValue#" cfsqltype="cf_sql_varchar">
@@ -88,10 +120,10 @@
     </cfstoredproc>
 </cfif>
 
-<!-- ================= FETCH DATA FOR EDIT ================= -->
-<cfif structKeyExists(url,"id") AND isNumeric(url.id) AND url.id GT 0>
+<!-- ================= FETCH EDIT DATA ================= -->
+<cfif len(decryptedID) AND decryptedID NEQ "0">
     <cfstoredproc procedure="sp_GetCustomerByID" datasource="ordersdsn">
-        <cfprocparam value="#url.id#" cfsqltype="cf_sql_integer">
+        <cfprocparam value="#decryptedID#" cfsqltype="cf_sql_integer">
         <cfprocresult name="qSingle">
     </cfstoredproc>
 </cfif>
@@ -99,7 +131,7 @@
 <html>
     <head>
         <title>Customer Records</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?v=1">
         <script>
             function confirmDelete(id){
                 if(confirm("Are you sure you want to delete this customer?")){
@@ -114,8 +146,12 @@
 
             window.onload=function(){
                 let msg=document.querySelector(".success");
-                if(msg){
+                if(msg)
+                {
                     setTimeout(()=>{msg.style.display="none"},3000);
+                    if(window.location.search.includes("msg=")){
+                        window.history.replaceState({}, document.title, "customer_crud.cfm");
+                    }
                 }
             }
         </script>
@@ -137,12 +173,14 @@
                     </div>
                 </cfif>
 
+                <!-- FORM MODE -->
                 <cfif structKeyExists(url,"id")>
                     <h3 class="form-title">
                         <cfif url.id EQ 0>Add New Customer<cfelse>Edit Customer</cfif>
                     </h3>
                     <form method="post">
-                        <input type="hidden" name="CustomerID" value="#url.id#">
+                        <input type="hidden" name="CustomerID" value="#decryptedID#">
+
                         <label>Customer Name:</label>
                         <input type="text" name="CustomerName" class="input-box" required
                             value="#url.id GT 0? qSingle.CustomerName : ''#"><br><br>
@@ -166,7 +204,7 @@
                         </div>
                     </cfif>
 
-                <!-- TABLE -->
+                <!-- TABLE MODE -->
                 <cfelse>
                     <div class="search-add">
                         <form method="post">
@@ -176,7 +214,7 @@
                             <button type="submit" name="search" class="btn">Search</button>
                             <a href="customer_crud.cfm" class="btn">Reset</a>
                         </form>
-                        <a href="customer_crud.cfm?id=0" class="btn">Add New Customer</a>
+                        <a href="customer_crud.cfm?id=0" class="add-btn">Add New Customer</a>
                         <p class="nav">
                             <a href="product_crud.cfm" class="button">Go to Product Records</a>
                         </p>
@@ -210,15 +248,15 @@
                                 <td>#qCustomer.Email#</td>
                                 <td>#qCustomer.PhoneNo#</td>
                                 <td>
-                                    <a href="customer_crud.cfm?id=#qCustomer.CustomerID#" class="btn">Edit</a>
-                                    <button type="button" class="btn" onclick="confirmDelete(#qCustomer.CustomerID#)">Delete</button>
+                                    <cfset encID = safeEncrypt(qCustomer.CustomerID)>
+                                    <a href="customer_crud.cfm?id=#urlEncodedFormat(encID)#" class="btn edit-btn">Edit</a>
+                                    <button type="button" class="btn delete-btn" onclick="confirmDelete('#encID#')">Delete</button>
                                 </td>
                             </tr>
                             <cfset sl++>
                         </cfloop>
                     </table>
                 </cfif>
-
             </div>
         </cfoutput>
     </body>
