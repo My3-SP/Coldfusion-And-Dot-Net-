@@ -1,18 +1,53 @@
 <cfparam name="SearchErrorMsg" default="">
 <cfparam name="productErrorMsg" default="">
 
+<!-- ================= ENCRYPTION KEY ================= -->
+<cfset encryptionKey = "MySecretKey123456789012345678iuh">
+<cfset decryptedID = "">
+
+<!-- ================= SAFE DECRYPT ================= -->
+<cffunction name="safeDecrypt" returntype="string">
+    <cfargument name="value" required="true">
+    <cftry>
+        <cfreturn decrypt(arguments.value, encryptionKey, "AES/CBC/PKCS5Padding", "Base64")>
+        <cfcatch>
+            <cfreturn "">
+        </cfcatch>
+    </cftry>
+</cffunction>
+
+<!-- ================= SAFE ENCRYPT ================= -->
+<cffunction name="safeEncrypt" returntype="string">
+    <cfargument name="value" required="true">
+    <cfreturn encrypt(arguments.value, encryptionKey, "AES/CBC/PKCS5Padding", "Base64")>
+</cffunction>
+
+<!-- ================= HANDLE URL ID ================= -->
+<cfif structKeyExists(url,"id") AND len(url.id)>
+    <cfif url.id EQ "0">
+        <cfset decryptedID = "0">
+    <cfelse>
+        <cfset decryptedID = safeDecrypt(url.id)>
+    </cfif>
+</cfif>
+
 <!-- ================= DELETE ================= -->
-<cfif structKeyExists(form,"deleteID") AND isNumeric(form.deleteID)>
-    <cfstoredproc procedure="sp_DeleteProduct" datasource="ordersdsn">
-        <cfprocparam value="#form.deleteID#" cfsqltype="cf_sql_integer">
-    </cfstoredproc>
-    <cflocation url="product_crud.cfm?msg=deleted" addtoken="false">
+<cfif structKeyExists(form,"deleteID") AND len(form.deleteID)>
+    <cfset realID = safeDecrypt(form.deleteID)>
+    <cfif isNumeric(realID)>
+        <cfstoredproc procedure="sp_DeleteProduct" datasource="ordersdsn">
+            <cfprocparam value="#realID#" cfsqltype="cf_sql_integer">
+        </cfstoredproc>
+        <cflocation url="product_crud.cfm?msg=deleted" addtoken="false">
+    </cfif>
 </cfif>
 
 <!-- ================= SAVE ================= -->
 <cfif structKeyExists(form,"ProductName")>
+
     <cfset cleanName = trim(form.ProductName)>
     <cfset priceValue = form.Price>
+    <cfset realID = structKeyExists(form,"ProductID") ? safeDecrypt(form.ProductID) : "">
 
     <!-- Validation -->
     <cfif len(cleanName) LT 2>
@@ -28,11 +63,10 @@
         <cfstoredproc procedure="sp_CheckProductExists" datasource="ordersdsn">
             <cfprocparam value="#cleanName#" cfsqltype="cf_sql_varchar">
             <cfprocparam value="#priceValue#" cfsqltype="cf_sql_decimal">
-            <cfprocparam value="#structKeyExists(form,'ProductID') ? form.ProductID : ''#"
-                        cfsqltype="cf_sql_integer"
-                        null="#NOT structKeyExists(form,'ProductID')#">
+            <cfprocparam value="#realID#" cfsqltype="cf_sql_integer" null="#NOT len(realID)#">
             <cfprocresult name="qExists">
         </cfstoredproc>
+
         <cfif qExists.recordcount GT 0>
             <cfset productErrorMsg = "Product already exists with same name and price.">
         </cfif>
@@ -40,9 +74,9 @@
 
     <!-- Insert / Update -->
     <cfif NOT len(productErrorMsg)>
-        <cfif structKeyExists(form,"ProductID") AND form.ProductID NEQ 0>
+        <cfif len(realID) AND realID NEQ 0>
             <cfstoredproc procedure="sp_UpdateProduct" datasource="ordersdsn">
-                <cfprocparam value="#form.ProductID#" cfsqltype="cf_sql_integer">
+                <cfprocparam value="#realID#" cfsqltype="cf_sql_integer">
                 <cfprocparam value="#cleanName#" cfsqltype="cf_sql_varchar">
                 <cfprocparam value="#priceValue#" cfsqltype="cf_sql_decimal">
             </cfstoredproc>
@@ -55,6 +89,7 @@
             <cflocation url="product_crud.cfm?msg=added" addtoken="false">
         </cfif>
     </cfif>
+
 </cfif>
 
 <!-- ================= SEARCH ================= -->
@@ -84,9 +119,9 @@
 </cfif>
 
 <!-- ================= FETCH EDIT ================= -->
-<cfif structKeyExists(url,"id") AND isNumeric(url.id) AND url.id GT 0>
+<cfif len(decryptedID) AND decryptedID NEQ "0">
     <cfstoredproc procedure="sp_GetProductByID" datasource="ordersdsn">
-        <cfprocparam value="#url.id#" cfsqltype="cf_sql_integer">
+        <cfprocparam value="#decryptedID#" cfsqltype="cf_sql_integer">
         <cfprocresult name="qSingle">
     </cfstoredproc>
 </cfif>
@@ -94,7 +129,7 @@
 <html>
     <head>
         <title>Product Records</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?v=1">
         <script>
             function confirmDelete(id){
                 if(confirm("Are you sure you want to delete this product?")){
@@ -109,10 +144,14 @@
 
             window.onload = function(){
                 let msg = document.querySelector(".success");
-                if(msg){
+                if(msg)
+                {
                     setTimeout(function(){
                         msg.style.display="none";
                     },3000);
+                    if(window.location.search.includes("msg=")){
+                        window.history.replaceState({}, document.title, "product_crud.cfm");
+                    }
                 }
             }
         </script>
@@ -182,7 +221,7 @@
                             <a href="product_crud.cfm" class="btn">Reset</a>
                         </form>
 
-                        <a href="product_crud.cfm?id=0" class="btn">Add New Product</a>
+                        <a href="product_crud.cfm?id=0" class="btn add-btn">Add New Product</a>
 
                         <p class="nav">
                             <a href="customer_crud.cfm" class="button"> Go to Customer Records</a>
@@ -217,8 +256,9 @@
                                 <td>#qProduct.ProductName#</td>
                                 <td>#qProduct.Price#</td>
                                 <td class="actions-cell">
-                                    <a href="product_crud.cfm?id=#qProduct.ProductID#" class="btn">Edit</a>
-                                    <button type="button" class="btn" onclick="confirmDelete(#qProduct.ProductID#)">Delete</button>
+                                    <cfset encID = safeEncrypt(qProduct.ProductID)>
+                                    <a href="product_crud.cfm?id=#urlEncodedFormat(encID)#" class="btn edit-btn">Edit</a>
+                                    <button type="button" class="btn delete-btn" onclick="confirmDelete('#encID#')">Delete</button>
                                 </td>
                             </tr>
                             <cfset sl++>
