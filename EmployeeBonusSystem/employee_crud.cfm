@@ -191,6 +191,11 @@
                         <th>Final Salary</th>
                         <th>Action</th>
                     </tr>
+                    <cfif qEmployee.recordcount EQ 0>
+                        <tr>
+                            <td colspan="10" align="center">No employess found.</td>
+                        </tr>
+                    </cfif>
                     <cfset sl=1>
                     <cfloop query="qEmployee">
                         <tr>
@@ -216,3 +221,4 @@
         </cfoutput>
     </body>
 </html>
+
