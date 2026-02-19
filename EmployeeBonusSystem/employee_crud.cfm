@@ -89,7 +89,7 @@
             <cfset salaryError = res.errors.salary ?: "">
             <cfset ratingError = res.errors.rating ?: "">
     <cfelse>
-        <cfset msg = len(realID) ? "Employee Updated Successfully" : "Employee Added Successfully">
+        <cfset msg = realID GT 0 ? "Employee Updated Successfully" : "Employee Added Successfully">
         <cflocation url="employee_crud.cfm?successMsg=#urlEncodedFormat(msg)#" addToken="false">
     </cfif>
 </cfif>
@@ -249,3 +249,4 @@
         </cfoutput>
     </body>
 </html>
+
