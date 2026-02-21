@@ -1,0 +1,213 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #eef2f7, #dfe6ee);
+    color: #2c3e50;
+}
+
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.header-card {
+    background: #486480;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+    color: white;
+}
+
+.header-card h2 {
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* ===== SEARCH + ADD SECTION ===== */
+.search-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.search-input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* ===== INPUTS ===== */
+.input-emp {
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 250px;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #486480;
+    box-shadow: 0 0 6px rgba(72,100,128,0.4);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4a7fa7;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn.edit-btn {
+    background-color: #2e7d32;
+}
+
+.btn.edit-btn:hover {
+    background-color: #1b5e20;
+}
+
+.btn.delete-btn {
+    background-color: #c62828;
+}
+
+.btn.delete-btn:hover {
+    background-color: #8e0000;
+}
+
+.btn.add-btn {
+    background-color: #e95528;
+}
+
+.btn.add-btn:hover {
+    background-color: #e7391a;
+}
+
+/* ===== FORM ===== */
+.employee-form {
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.employee-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #486480;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.employee-form input {
+    width: 100%;
+}
+
+/* ===== TABLE ===== */
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 12px 8px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+    font-size: 14px;
+}
+
+.employee-table th {
+    background: #486480;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.employee-table tr:nth-child(even) {
+    background: #f9fbfd;
+}
+
+.employee-table tr:hover {
+    background: #eef3f9;
+    transition: 0.3s;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.employee-table td .btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    margin: 0 3px;
+}
+
+/* ===== ERROR / SUCCESS ===== */
+.field-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 2px;
+}
+
+.message-box {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.error {
+    background: #ffebee;
+    color: #c62828;
+}
