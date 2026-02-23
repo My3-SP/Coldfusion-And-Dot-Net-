@@ -1,11 +1,8 @@
-/* ===== GLOBAL RESET ===== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-/* ===== BODY ===== */
 body {
     font-family: 'Segoe UI', Tahoma, sans-serif;
     background: linear-gradient(135deg, #aca1e9, #fded8e);
