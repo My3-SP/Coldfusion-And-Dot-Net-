@@ -1,0 +1,42 @@
+SUCCESS: IFSC_MythriSP-mlv3eult_1.jpg uploaded at {ts '2026-02-20 21:47:02'} Size:1265682
+SUCCESS: IFSC_MythriSP-mlv3kuhk_2.jpg uploaded by mythrisprasad@gmail.com at {ts '2026-02-20 21:51:42'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv3s89b_3.jpg | {ts '2026-02-20 21:57:26'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv3tgtl_4.jpg | {ts '2026-02-20 21:58:24'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv3ukc3_5.jpg | {ts '2026-02-20 21:59:15'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-20 22:10:05'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv4b4yp_6.jpg | {ts '2026-02-20 22:12:08'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv4pua6_8.jpg | {ts '2026-02-20 22:23:34'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-20 22:24:48'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-20 22:26:09'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv4xkmu_9.jpg | {ts '2026-02-20 22:29:35'}
+SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv4yhnh_a.jpg | {ts '2026-02-20 22:30:18'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | 2026-02-20 22:45:34
+READ SUCCESS | IFSC_MythriSP-mlv5if7i_b.jpg | 2026-02-20 22:45:48
+UPLOAD SUCCESS | aravm@gmail.com | IFSC_MythriSP-mlv5if7i_b.jpg | 2026-02-20 22:45:48
+READ SUCCESS | IFSC_MythriSP-mlv60zyz_c.jpg | 2026-02-20 23:00:15
+UPLOAD SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv60zyz_c.jpg | 2026-02-20 23:00:15
+READ SUCCESS | IFSC_MythriSP-mlv6gaji_d.jpg | 2026-02-20 23:12:08
+UPLOAD SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlv6gaji_d.jpg | 2026-02-20 23:12:08
+READ SUCCESS | IFSC_MythriSP-mlv6j5gb_e.jpg | 2026-02-20 23:14:21
+UPLOAD SUCCESS | afvad@gmail.com | IFSC_MythriSP-mlv6j5gb_e.jpg | 2026-02-20 23:14:21
+READ SUCCESS | IFSC_MythriSP-mlvv9u02_f.jpg | 2026-02-21 10:46:57
+UPLOAD SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlvv9u02_f.jpg | 2026-02-21 10:46:57
+UPLOAD SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlvve30a_g.jpg | 2026-02-21 10:50:15
+UPLOAD SUCCESS | mythrisprasad@gmail.com | IFSC_MythriSP-mlvvqykn_h.jpg | 2026-02-21 11:00:16
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | 2026-02-21 11:02:47
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | 2026-02-21 11:10:12
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | {ts '2026-02-21 11:15:24'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | {ts '2026-02-21 18:21:02'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | {ts '2026-02-22 11:43:40'}
+UPLOAD SUCCESS | hello@gmail.com | painting1.png | {ts '2026-02-22 11:44:51'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | {ts '2026-02-23 08:02:09'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-23 11:08:26'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-23 11:09:01'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting1.png | {ts '2026-02-23 11:19:22'}
+ERROR | The MIME type of the uploaded file [image/webp] was rejected by the server. | {ts '2026-02-23 11:20:54'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting2.png | {ts '2026-02-23 11:21:51'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting3.png | {ts '2026-02-23 12:37:02'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting3.png | {ts '2026-02-23 12:38:14'}
+UPLOAD SUCCESS | mythrisprasad@gmail.com | painting3.png | {ts '2026-02-23 14:33:30'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-23 14:36:58'}
+ERROR | The MIME type of the uploaded file [text/plain] was rejected by the server. | {ts '2026-02-23 14:37:18'}
