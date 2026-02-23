@@ -84,9 +84,12 @@
         <title>Image Upload System</title>
         <link rel="stylesheet" href="style.css">
         <script>
-            setTimeout(()=>{
-                document.querySelectorAll(".alert").forEach(e=>e.style.display="none");
-            },3000);
+             setTimeout(function(){
+                let successMsg = document.querySelector(".success");
+                if(successMsg){
+                    successMsg.style.display = "none";
+                }
+            }, 3000);
 
             function openModal(){
                 document.getElementById("imgModal").style.display="block";
@@ -109,12 +112,12 @@
                 <h2>Upload Image</h2>
                 <!-- SUCCESS -->
                 <cfif len(session.uploadState.successMsg)>
-                    <div class="success alert">#session.uploadState.successMsg#</div>
+                    <div class="success">#session.uploadState.successMsg#</div>
                     <cfset session.uploadState.successMsg = "">
                 </cfif>
                 <!-- ERROR -->
                 <cfif len(session.uploadState.errorMsg)>
-                    <div class="error alert">#session.uploadState.errorMsg#</div>
+                    <div class="error">#session.uploadState.errorMsg#</div>
                     <cfset session.uploadState.errorMsg = "">
                 </cfif>
                 <!-- ================= FORM BEFORE UPLOAD ================= -->
