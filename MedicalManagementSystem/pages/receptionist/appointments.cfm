@@ -15,17 +15,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <style>
-    /* #loadingOverlay {
-        display         : none;
-        position        : fixed;
-        inset           : 0;
-        background      : rgba(255,255,255,.55);
-        z-index         : 9999;
-        align-items     : center;
-        justify-content : center;
-    }
-    #loadingOverlay.show { display: flex; } */
-
     #appointmentsTable thead th {
         background-color: #7070db;
         color: #fff;
@@ -80,12 +69,6 @@
         vertical-align: middle;
     }
 </style>
-
-<!--- <div id="loadingOverlay">
-    <div class="spinner-border text-primary" style="width:3rem;height:3rem;" role="status">
-        <span class="visually-hidden">Loading…</span>
-    </div>
-</div> --->
 
 <div id="main">
     <header class="mb-3">
@@ -341,10 +324,6 @@ $(document).ready(function () {
         });
     }
 
-    // ── Overlay ───────────────────────────────────────────
-    // function showOverlay() { $('#loadingOverlay').addClass('show'); }
-    // function hideOverlay()  { $('#loadingOverlay').removeClass('show'); }
-
     // ── Clear inline errors ───────────────────────────────
     function clearErrors() {
         $('#patientError,#doctorError,#dateError,#timeError').text('');
@@ -417,8 +396,6 @@ $(document).ready(function () {
             swAlert('error', 'Error', 'No appointment selected for update.');
             return;
         }
-
-        // showOverlay();
         $('#submitBtn').prop('disabled', true);
 
         $.ajax({
@@ -427,7 +404,6 @@ $(document).ready(function () {
             data:     $(this).serialize(),
             dataType: 'json',
             success: function (res) {
-                // hideOverlay();
                 $('#submitBtn').prop('disabled', false);
 
                 var success = res.success || res.SUCCESS;
@@ -490,7 +466,6 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // hideOverlay();
                 $('#submitBtn').prop('disabled', false);
                 swAlert('error', 'Server Error',
                     'Something went wrong (' + xhr.status + '). Please try again.');
@@ -566,14 +541,12 @@ $(document).ready(function () {
             swAlert('error', 'Error', 'Could not read appointment ID.');
             return;
         }
-        // showOverlay();
         $.ajax({
             url:      BASE + '?method=' + method + '&returnformat=json',
             type:     'POST',
             data:     { appointmentID: id },
             dataType: 'json',
             success: function (res) {
-                // hideOverlay();
                 var success = res.success || res.SUCCESS;
                 var message = res.message || res.MESSAGE || '';
 
@@ -611,7 +584,6 @@ $(document).ready(function () {
                 swAlert('success', 'Done!', message);
             },
             error: function (xhr) {
-                // hideOverlay();
                 swAlert('error', 'Server Error',
                     method + ' failed (' + xhr.status + '). Please try again.');
             }
