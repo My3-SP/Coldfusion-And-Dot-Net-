@@ -672,10 +672,4 @@ function resetForm() {
     $('#patientError,#doctorError,#dateError,#timeError').text('');
     $('#patientID,#doctorID,#appointmentDate,#appointmentTime').removeClass('is-invalid');
 }
-
-const toggleBtn = document.getElementById('sidebarToggle');
-const sidebar   = document.querySelector('.sidebar-wrapper');
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hide-sidebar');
-});
 </script>
