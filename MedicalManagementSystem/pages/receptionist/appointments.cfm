@@ -15,7 +15,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <style>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     #appointmentsTable thead th {
         background-color: #7070db;
         color: #fff;
@@ -111,7 +114,11 @@
         <cfset structDelete(session,"successMessage")>
     </cfif>
 
+<<<<<<< HEAD
     <!---  BOOK / EDIT FORM --->
+=======
+    <!---  BOOK / EDIT FORM  --->
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body fw-semibold">
             <i class="bi bi-calendar-plus me-2 text-primary"></i>
@@ -282,7 +289,11 @@ $(document).ready(function () {
     var BASE        = '/MedicalManagementSystem/components/ReceptionistDashboardService.cfc';
     var selectedRow = null;
 
+<<<<<<< HEAD
     // ── Generate 30-min time slots 
+=======
+    //  Generate 30-min time slots 
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     function buildTimeSlots(selectedVal) {
         var opts = '<option value="">Select Time</option>';
         for (var h = 8; h < 22; h++) {
@@ -301,9 +312,16 @@ $(document).ready(function () {
 
     $('#appointmentTime').html(buildTimeSlots(''));
 
+<<<<<<< HEAD
     $('#appointmentDate').attr('min', new Date().toISOString().split('T')[0]);
 
     //  SweetAlert2 helper
+=======
+    // Min date = today 
+    $('#appointmentDate').attr('min', new Date().toISOString().split('T')[0]);
+
+    //SweetAlert2 helper 
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     function swAlert(icon, title, text) {
         return Swal.fire({
             icon:               icon,
@@ -328,8 +346,12 @@ $(document).ready(function () {
         });
     }
 
+<<<<<<< HEAD
 
     //  Clear inline errors
+=======
+    //  Clear inline errors 
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     function clearErrors() {
         $('#patientError,#doctorError,#dateError,#timeError').text('');
         $('#patientID,#doctorID,#appointmentDate,#appointmentTime')
@@ -363,7 +385,11 @@ $(document).ready(function () {
              });
     }).draw();
 
+<<<<<<< HEAD
     //  Form submit (Book / Update) 
+=======
+    // Form submit (Book / Update) 
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
     $('#appointmentForm').on('submit', function (e) {
         e.preventDefault();
         clearErrors();
@@ -401,7 +427,10 @@ $(document).ready(function () {
             swAlert('error', 'Error', 'No appointment selected for update.');
             return;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
         $('#submitBtn').prop('disabled', true);
 
         $.ajax({
@@ -603,7 +632,11 @@ $(document).ready(function () {
 
 });
 
+<<<<<<< HEAD
 //  Edit appointment 
+=======
+//  Edit appointment
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
 function editAppointment(id, patient, doctor, date, time, remarks) {
     if (!id) {
         Swal.fire({
@@ -653,9 +686,14 @@ function resetForm() {
     $('#appointmentForm')[0].reset();
     $('#appointmentID').val('');
 
+<<<<<<< HEAD
     
     var opts = '<option value="">Select Time</option>';
     for (var h = 8; h < 22; h++) {
+=======
+    var opts = '<option value="">Select Time</option>';
+    for (var h = 0; h < 24; h++) {
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
         ['00', '30'].forEach(function (m) {
             var hh    = (h < 10 ? '0' : '') + h;
             var val   = hh + ':' + m;
@@ -678,5 +716,9 @@ function resetForm() {
     $('#patientError,#doctorError,#dateError,#timeError').text('');
     $('#patientID,#doctorID,#appointmentDate,#appointmentTime').removeClass('is-invalid');
 }
+<<<<<<< HEAD
 
 </script>
+=======
+</script>
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe

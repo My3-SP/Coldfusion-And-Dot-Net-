@@ -289,19 +289,19 @@ WHERE permission_name IN (
 -- USERS
 INSERT INTO USERS (username, password, role_id, full_name, email, phone)
 VALUES 
-('admin', '$2a$12$hashedpassword',
+('admin', '$2a$12$7d0U1JC1VBa.TarmQ2krweGhlMgkJE.wKqNETqNy4SJ2IeQX6dBi2', -- Admin@123
  (SELECT role_id FROM ROLES WHERE role_name = 'Admin'),
  'System Administrator', 'admin@mms.com', '9999999999'),
 
-('doctor1', '$2a$12$hashedpassword',
+('doctor1', '$2a$12$7d0U1JC1VBa.TarmQ2krweGhlMgkJE.wKqNETqNy4SJ2IeQX6dBi2', -- Admin@123
  (SELECT role_id FROM ROLES WHERE role_name = 'Doctor'),
  'Dr. Rajesh Kumar', 'doctor1@mms.com', '7777777777'),
 
-('reception1', '$2a$12$hashedpassword',
+('reception1', '$2a$12$7d0U1JC1VBa.TarmQ2krweGhlMgkJE.wKqNETqNy4SJ2IeQX6dBi2', -- Admin@123
  (SELECT role_id FROM ROLES WHERE role_name = 'Receptionist'),
  'Front Desk Executive', 'reception1@mms.com', '8888888888'),
 
-('patient1', '$2a$12$hashedpassword',
+('patient1', '$2a$12$7d0U1JC1VBa.TarmQ2krweGhlMgkJE.wKqNETqNy4SJ2IeQX6dBi2', -- Admin@123
  (SELECT role_id FROM ROLES WHERE role_name = 'Patient'),
  'Anita Sharma', 'patient1@mms.com', '6666666666');
 

@@ -212,4 +212,8 @@ $(document).ready(function () {
     });
 });
 
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
