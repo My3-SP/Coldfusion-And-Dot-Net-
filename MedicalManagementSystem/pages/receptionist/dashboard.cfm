@@ -28,7 +28,7 @@
         white-space: nowrap;
     }
     #todayAppointmentsTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #todayAppointmentsTable tbody td {
         font-size: 15px;
@@ -51,6 +51,10 @@
         color: #fff !important;
         border-radius: 5px;
         border: none !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
@@ -208,9 +212,4 @@ $(document).ready(function () {
     });
 });
 
-const toggleBtn = document.getElementById('sidebarToggle');
-const sidebar   = document.querySelector('.sidebar-wrapper');
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hide-sidebar');
-});
 </script>

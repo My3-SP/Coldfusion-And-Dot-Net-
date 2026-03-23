@@ -34,9 +34,14 @@
 <cfset items = prescriptionService.getPrescriptionItems(prescription.prescription_id)>
 <cfset drugs = prescriptionService.getActiveDrugs()>
 
-<cfoutput>
-<div id="main">
 
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+<cfoutput>
     <div class="page-heading d-flex justify-content-between align-items-center mb-3">
         <h3>Edit Prescription &mdash; #encodeForHTML(appointment.patient_name)#</h3>
         <nav aria-label="breadcrumb">
@@ -174,8 +179,10 @@
         </div>
 
     </div>
+    </cfoutput>
 </div>
 
+<cfoutput>
 <script>
     var PRESCRIPTION_ID = #prescription.prescription_id#;
     var DRUGS_HTML      = document.querySelector('.med-drug').innerHTML;
@@ -324,4 +331,3 @@ $(document).ready(function () {
     });
 
 });
-</script>

@@ -25,7 +25,7 @@
         white-space: nowrap;
     }
     #billsTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #billsTable tbody td {
         font-size: 15px;
@@ -49,6 +49,10 @@
         border-radius: 5px;
         border: none !important;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
+    }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
         color: #4f46e5 !important;
@@ -62,7 +66,6 @@
 </style>
 
 <div id="main">
-
     <header class="mb-3">
         <a href="#" class="burger-btn d-block d-xl-none">
             <i class="bi bi-justify fs-3"></i>

@@ -1,7 +1,7 @@
 <cfinclude template="../../includes/header.cfm">
 <cfinclude template="adminSidebar.cfm">
 
-<!--- ================= SESSION SECURITY ================= --->
+<!---  SESSION SECURITY  --->
 <cfif  NOT structKeyExists(session,"user") OR session.user.role_id NEQ 1>
     <cflocation url="/MedicalManagementSystem/pages/error/unauthorized.cfm" addtoken="no">
 </cfif>
@@ -10,7 +10,7 @@
 <cfset securityService = createObject("component","MedicalManagementSystem.components.securityService")>
 <cfset bcryptService = createObject("component","MedicalManagementSystem.libs.bcrypt")>
 
-<!--- ================= GET ADMIN DATA ================= --->
+<!---  GET ADMIN DATA  --->
 <cfset admin = userService.getAdminDetails(session.user.user_id)>
 
 <div id="main">
@@ -40,6 +40,7 @@
             <h3>My Account</h3>
             <hr>
             <div id="formMessage" class="alert d-none"></div>
+
             <!--- PROFILE FORM --->
             <div class="card mb-4">
                 <div class="card-header">Personal Details</div>
@@ -99,118 +100,111 @@
 <cfinclude template="../../includes/footer.cfm">
 
 <script>
-$(document).ready(function(){
+    $(document).ready(function(){
 
-/* ================= UPDATE PROFILE ================= */
+    /* UPDATE PROFILE */
 
-$('#updateAdminForm').on('submit', function(e){
+    $('#updateAdminForm').on('submit', function(e){
 
-    e.preventDefault();
+        e.preventDefault();
 
-    clearErrors();
+        clearErrors();
 
-    var fullName = $('input[name="full_name"]').val().trim();
-    var username = $('input[name="username"]').val().trim();
-    var email = $('input[name="email"]').val().trim();
-    var phone = $('input[name="phone"]').val().trim();
+        var fullName = $('input[name="full_name"]').val().trim();
+        var username = $('input[name="username"]').val().trim();
+        var email = $('input[name="email"]').val().trim();
+        var phone = $('input[name="phone"]').val().trim();
 
-    var nameRegex = /^[A-Za-z\s]+$/;
-    var emailRegex = /^(?!.*\.\.)([A-Za-z0-9]+)@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
-    var phoneRegex = /^(?!0+$)[6-9]\d{9}$/;
-    var valid = true;
+        var nameRegex = /^[A-Za-z\s]+$/;
+        var emailRegex = /^(?!.*\.\.)([A-Za-z0-9]+)@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+        var phoneRegex = /^(?!0+$)[6-9]\d{9}$/;
+        var valid = true;
 
-    if(fullName === ""){
-        showError('fullNameError',"Full name is required");
-        valid = false;
-    }
-    else if(!nameRegex.test(fullName)){
-        showError('fullNameError',"Only letters allowed");
-        valid = false;
-    }
-
-    if(username.length < 4){
-        showError('usernameError',"Username must be at least 4 characters");
-        valid = false;
-    }
-
-    if(!emailRegex.test(email)){
-        showError('emailError',"Enter a valid email");
-        valid = false;
-    }
-
-    if(phone !== "" && !phoneRegex.test(phone)){
-        showError('phoneError',"Phone must be 10 digits");
-        valid = false;
-    }
-
-    if(!valid){
-        return;
-    }
-
-    $('#updateAdminBtnText').text('Updating...');
-    $('#updateAdminSpinner').removeClass('d-none');
-    $('#updateAdminBtn').prop('disabled',true);
-
-    $.ajax({
-
-        url:'/MedicalManagementSystem/components/AdminAccountService.cfc?method=updateAdminDetailsAjax&returnformat=json',
-        type:'POST',
-        data:$(this).serialize(),
-        dataType:'json',
-
-        success:function(res){
-
-            $('#updateAdminBtnText').text('Update');
-            $('#updateAdminSpinner').addClass('d-none');
-            $('#updateAdminBtn').prop('disabled',false);
-
-            var ok = res.SUCCESS === true || res.SUCCESS === 'true';
-
-            if(!ok){
-                showMessage('danger',res.MESSAGE);
-                return;
-            }
-
-            showMessage('success',res.MESSAGE);
-        },
-
-        error:function(){
-
-            $('#updateAdminBtnText').text('Update');
-            $('#updateAdminSpinner').addClass('d-none');
-            $('#updateAdminBtn').prop('disabled',false);
-
-            showMessage('danger','Server error. Please try again.');
+        if(fullName === ""){
+            showError('fullNameError',"Full name is required");
+            valid = false;
+        }
+        else if(!nameRegex.test(fullName)){
+            showError('fullNameError',"Only letters allowed");
+            valid = false;
         }
 
+        if(username.length < 4){
+            showError('usernameError',"Username must be at least 4 characters");
+            valid = false;
+        }
+
+        if(!emailRegex.test(email)){
+            showError('emailError',"Enter a valid email");
+            valid = false;
+        }
+
+        if(phone !== "" && !phoneRegex.test(phone)){
+            showError('phoneError',"Phone must be 10 digits");
+            valid = false;
+        }
+
+        if(!valid){
+            return;
+        }
+
+        $('#updateAdminBtnText').text('Updating...');
+        $('#updateAdminSpinner').removeClass('d-none');
+        $('#updateAdminBtn').prop('disabled',true);
+
+        $.ajax({
+
+            url:'/MedicalManagementSystem/components/AdminAccountService.cfc?method=updateAdminDetailsAjax&returnformat=json',
+            type:'POST',
+            data:$(this).serialize(),
+            dataType:'json',
+
+            success:function(res){
+
+                $('#updateAdminBtnText').text('Update');
+                $('#updateAdminSpinner').addClass('d-none');
+                $('#updateAdminBtn').prop('disabled',false);
+
+                var ok = res.SUCCESS === true || res.SUCCESS === 'true';
+
+                if(!ok){
+                    showMessage('danger',res.MESSAGE);
+                    return;
+                }
+
+                showMessage('success',res.MESSAGE);
+            },
+
+            error:function(){
+
+                $('#updateAdminBtnText').text('Update');
+                $('#updateAdminSpinner').addClass('d-none');
+                $('#updateAdminBtn').prop('disabled',false);
+
+                showMessage('danger','Server error. Please try again.');
+            }
+
+        });
+
+    });
     });
 
-});
-});
-/* ================= HELPER FUNCTIONS ================= */
-function clearErrors(){
-    $('.error-msg').text('');
-}
-function showError(id,message){
-    $('#'+id).text(message);
-}
-function showMessage(type, message){
-    var msgBox = $('#formMessage');
-    msgBox
-        .removeClass('d-none alert-success alert-danger')
-        .addClass('alert alert-' + type)
-        .html(message);
+    /*  HELPER FUNCTIONS  */
+    function clearErrors(){
+        $('.error-msg').text('');
+    }
+    function showError(id,message){
+        $('#'+id).text(message);
+    }
+    function showMessage(type, message){
+        var msgBox = $('#formMessage');
+        msgBox
+            .removeClass('d-none alert-success alert-danger')
+            .addClass('alert alert-' + type)
+            .html(message);
 
-    setTimeout(function(){
-        $('#formMessage').addClass('d-none');
-    },4000);
-}
-</script>
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.querySelector('.sidebar-wrapper');
-
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
+        setTimeout(function(){
+            $('#formMessage').addClass('d-none');
+        },4000);
+    }
 </script>

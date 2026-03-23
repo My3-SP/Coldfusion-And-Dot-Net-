@@ -39,9 +39,7 @@
             </div>
         </div>
         <div class="sidebar-menu">
-            <ul class="menu">
-                <!--- <li class="sidebar-title">Menu</li> --->
-                
+            <ul class="menu">                 
                 <li
                     class="sidebar-link">
                     <a href="/MedicalManagementSystem/pages/receptionist/dashboard.cfm" class='sidebar-link'>
@@ -56,8 +54,7 @@
                         <i class="bi bi-people-fill"></i>
                         <span>Appointments</span>
                     </a>
-                </li>
-
+                </li>   
                 <li
                     class="sidebar-link">
                     <a href="/MedicalManagementSystem/pages/receptionist/registerPatient.cfm" class='sidebar-link'>

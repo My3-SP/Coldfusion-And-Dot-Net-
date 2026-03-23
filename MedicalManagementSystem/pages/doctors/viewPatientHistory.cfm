@@ -208,11 +208,3 @@
         $("#" + target).slideToggle(200);
     });
 </script>
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar = document.querySelector('.sidebar-wrapper');
-
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
-</script>

@@ -28,7 +28,7 @@
         white-space: nowrap;
     }
     #appointmentsTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #appointmentsTable tbody td {
         font-size: 15px;
@@ -52,12 +52,17 @@
         border-radius: 5px;
         border: none !important;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
+    }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
         color: #4f46e5 !important;
         border: none !important;
         border-radius: 5px;
     }
+
     .dataTables_wrapper .dataTables_info {
         font-size: 15px;
         color: #6b7280;
@@ -341,9 +346,4 @@ $(document).ready(function () {
 
 });
 
-const toggleBtn = document.getElementById('sidebarToggle');
-const sidebar   = document.querySelector('.sidebar-wrapper');
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hide-sidebar');
-});
 </script>

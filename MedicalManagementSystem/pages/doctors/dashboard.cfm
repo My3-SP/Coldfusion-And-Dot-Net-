@@ -28,7 +28,7 @@
         white-space: nowrap;
     }
     #todayTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #todayTable tbody td {
         font-size: 15px;
@@ -51,6 +51,10 @@
         color: #fff !important;
         border-radius: 5px;
         border: none !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
@@ -181,30 +185,23 @@
             timerProgressBar:  true
         });
     }
-</script>
 
-<script>
-$(document).ready(function () {
-    $('#todayTable').DataTable({
-        pageLength: 5,
-        order: [[2, 'asc']],
-        columnDefs: [{ orderable: false, targets: [3] }],
-        language: {
-            emptyTable: 'No appointments scheduled for today.',
-            search:     '<i class="bi bi-search me-1"></i>Search:',
-            lengthMenu: 'Show _MENU_ entries',
-            info:       'Showing _START_ to _END_ of _TOTAL_ appointments',
-            paginate: {
-                previous: '&lsaquo;',
-                next:     '&rsaquo;'
+    $(document).ready(function () {
+        $('#todayTable').DataTable({
+            pageLength: 5,
+            order: [[2, 'asc']],
+            columnDefs: [{ orderable: false, targets: [3] }],
+            language: {
+                emptyTable: 'No appointments scheduled for today.',
+                search:     '<i class="bi bi-search me-1"></i>Search:',
+                lengthMenu: 'Show _MENU_ entries',
+                info:       'Showing _START_ to _END_ of _TOTAL_ appointments',
+                paginate: {
+                    previous: '&lsaquo;',
+                    next:     '&rsaquo;'
+                }
             }
-        }
+        });
     });
-});
 
-const toggleBtn = document.getElementById('sidebarToggle');
-const sidebar   = document.querySelector('.sidebar-wrapper');
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hide-sidebar');
-});
 </script>

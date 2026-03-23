@@ -15,16 +15,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <style>
-    /* #loadingOverlay {
-        display         : none;
-        position        : fixed;
-        inset           : 0;
-        background      : rgba(255,255,255,.55);
-        z-index         : 9999;
-        align-items     : center;
-        justify-content : center;
-    }
-    #loadingOverlay.show { display: flex; } */
 
     #appointmentsTable thead th {
         background-color: #7070db;
@@ -36,7 +26,7 @@
         white-space: nowrap;
     }
     #appointmentsTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #appointmentsTable tbody td {
         font-size: 15px;
@@ -60,6 +50,10 @@
         border-radius: 5px;
         border: none !important;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
+    }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
         color: #4f46e5 !important;
@@ -80,12 +74,6 @@
         vertical-align: middle;
     }
 </style>
-
-<!--- <div id="loadingOverlay">
-    <div class="spinner-border text-primary" style="width:3rem;height:3rem;" role="status">
-        <span class="visually-hidden">Loading…</span>
-    </div>
-</div> --->
 
 <div id="main">
     <header class="mb-3">
@@ -123,7 +111,7 @@
         <cfset structDelete(session,"successMessage")>
     </cfif>
 
-    <!--- ── BOOK / EDIT FORM ─────────────────────────────────────────── --->
+    <!---  BOOK / EDIT FORM --->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body fw-semibold">
             <i class="bi bi-calendar-plus me-2 text-primary"></i>
@@ -203,7 +191,7 @@
         </div>
     </div>
 
-    <!--- ── APPOINTMENTS TABLE ───────────────────────────────────────── --->
+    <!---  APPOINTMENTS TABLE  --->
     <div class="card border-0 shadow-sm">
         <div class="card-body fw-semibold">
             <i class="bi bi-calendar3 me-2 text-primary"></i>Upcoming Appointments
@@ -294,10 +282,10 @@ $(document).ready(function () {
     var BASE        = '/MedicalManagementSystem/components/ReceptionistDashboardService.cfc';
     var selectedRow = null;
 
-    // ── Generate 30-min time slots ────────────────────────
+    // ── Generate 30-min time slots 
     function buildTimeSlots(selectedVal) {
-        var opts = '<option value=""> Select Time </option>';
-        for (var h = 0; h < 24; h++) {
+        var opts = '<option value="">Select Time</option>';
+        for (var h = 8; h < 22; h++) {
             ['00', '30'].forEach(function (m) {
                 var hh  = (h < 10 ? '0' : '') + h;
                 var val = hh + ':' + m;
@@ -313,10 +301,9 @@ $(document).ready(function () {
 
     $('#appointmentTime').html(buildTimeSlots(''));
 
-    // ── Min date = today ──────────────────────────────────
     $('#appointmentDate').attr('min', new Date().toISOString().split('T')[0]);
 
-    // ── SweetAlert2 helper ────────────────────────────────
+    //  SweetAlert2 helper
     function swAlert(icon, title, text) {
         return Swal.fire({
             icon:               icon,
@@ -341,18 +328,15 @@ $(document).ready(function () {
         });
     }
 
-    // ── Overlay ───────────────────────────────────────────
-    // function showOverlay() { $('#loadingOverlay').addClass('show'); }
-    // function hideOverlay()  { $('#loadingOverlay').removeClass('show'); }
 
-    // ── Clear inline errors ───────────────────────────────
+    //  Clear inline errors
     function clearErrors() {
         $('#patientError,#doctorError,#dateError,#timeError').text('');
         $('#patientID,#doctorID,#appointmentDate,#appointmentTime')
             .removeClass('is-invalid');
     }
 
-    // ── DataTable ─────────────────────────────────────────
+    //  DataTable
     var table = $('#appointmentsTable').DataTable({
         pageLength:  5,
         order:       [[3, 'asc']],
@@ -379,7 +363,7 @@ $(document).ready(function () {
              });
     }).draw();
 
-    // ── Form submit (Book / Update) ───────────────────────
+    //  Form submit (Book / Update) 
     $('#appointmentForm').on('submit', function (e) {
         e.preventDefault();
         clearErrors();
@@ -418,7 +402,6 @@ $(document).ready(function () {
             return;
         }
 
-        // showOverlay();
         $('#submitBtn').prop('disabled', true);
 
         $.ajax({
@@ -427,7 +410,6 @@ $(document).ready(function () {
             data:     $(this).serialize(),
             dataType: 'json',
             success: function (res) {
-                // hideOverlay();
                 $('#submitBtn').prop('disabled', false);
 
                 var success = res.success || res.SUCCESS;
@@ -490,7 +472,6 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                // hideOverlay();
                 $('#submitBtn').prop('disabled', false);
                 swAlert('error', 'Server Error',
                     'Something went wrong (' + xhr.status + '). Please try again.');
@@ -566,14 +547,12 @@ $(document).ready(function () {
             swAlert('error', 'Error', 'Could not read appointment ID.');
             return;
         }
-        // showOverlay();
         $.ajax({
             url:      BASE + '?method=' + method + '&returnformat=json',
             type:     'POST',
             data:     { appointmentID: id },
             dataType: 'json',
             success: function (res) {
-                // hideOverlay();
                 var success = res.success || res.SUCCESS;
                 var message = res.message || res.MESSAGE || '';
 
@@ -611,7 +590,6 @@ $(document).ready(function () {
                 swAlert('success', 'Done!', message);
             },
             error: function (xhr) {
-                // hideOverlay();
                 swAlert('error', 'Server Error',
                     method + ' failed (' + xhr.status + '). Please try again.');
             }
@@ -625,7 +603,7 @@ $(document).ready(function () {
 
 });
 
-//  Edit appointment (outside ready — called from inline) 
+//  Edit appointment 
 function editAppointment(id, patient, doctor, date, time, remarks) {
     if (!id) {
         Swal.fire({
@@ -637,8 +615,8 @@ function editAppointment(id, patient, doctor, date, time, remarks) {
     }
 
     // Rebuild slots with current time selected
-    var opts = '<option value="">— Select Time —</option>';
-    for (var h = 0; h < 24; h++) {
+    var opts = '<option value=""> Select Time </option>';
+    for (var h = 8; h < 22; h++) {
         ['00', '30'].forEach(function (m) {
             var hh  = (h < 10 ? '0' : '') + h;
             var val = hh + ':' + m;
@@ -675,19 +653,19 @@ function resetForm() {
     $('#appointmentForm')[0].reset();
     $('#appointmentID').val('');
 
-    // Rebuild blank slots
-    var opts = '<option value="">— Select Time —</option>';
-    for (var h = 0; h < 24; h++) {
+    
+    var opts = '<option value="">Select Time</option>';
+    for (var h = 8; h < 22; h++) {
         ['00', '30'].forEach(function (m) {
-            var hh  = (h < 10 ? '0' : '') + h;
-            var val = hh + ':' + m;
-            var ampm = h < 12 ? 'AM' : 'PM';
-            var h12  = h % 12 === 0 ? 12 : h % 12;
+            var hh    = (h < 10 ? '0' : '') + h;
+            var val   = hh + ':' + m;
+            var ampm  = h < 12 ? 'AM' : 'PM';
+            var h12   = h % 12 === 0 ? 12 : h % 12;
             var label = (h12 < 10 ? '0' : '') + h12 + ':' + m + ' ' + ampm;
             opts += '<option value="' + val + '">' + label + '</option>';
         });
     }
-    $('#appointmentTime').html('<option value="">— Select Time —</option>' + opts);
+    $('#appointmentTime').html(opts);
 
     $('#submitBtn')
         .data('action', 'bookAppointment')
@@ -701,9 +679,4 @@ function resetForm() {
     $('#patientID,#doctorID,#appointmentDate,#appointmentTime').removeClass('is-invalid');
 }
 
-const toggleBtn = document.getElementById('sidebarToggle');
-const sidebar   = document.querySelector('.sidebar-wrapper');
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hide-sidebar');
-});
 </script>

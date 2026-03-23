@@ -26,39 +26,43 @@
         white-space: nowrap;
     }
     #deptTable tbody tr:hover {
-        background-color: ##f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #deptTable tbody td {
         font-size: 15px;
         vertical-align: middle;
     }
     .dataTables_wrapper .dataTables_filter input {
-        border: 1px solid ##c7d2fe;
+        border: 1px solid #c7d2fe;
         border-radius: 6px;
         padding: 4px 10px;
         font-size: 15px;
     }
     .dataTables_wrapper .dataTables_length select {
-        border: 1px solid ##c7d2fe;
+        border: 1px solid #c7d2fe;
         border-radius: 6px;
         padding: 2px 8px;
         font-size: 15px;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background: ##4f46e5 !important;
-        color: ##fff !important;
+        background: #4f46e5 !important;
+        color: #fff !important;
         border-radius: 5px;
         border: none !important;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background: ##e0e7ff !important;
-        color: ##4f46e5 !important;
+        background: #e0e7ff !important;
+        color: #4f46e5 !important;
         border: none !important;
         border-radius: 5px;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
+    }
     .dataTables_wrapper .dataTables_info {
         font-size: 13px;
-        color: ##6b7280;
+        color: #6b7280;
     }
 </style>
 
@@ -148,7 +152,7 @@
         </div>
     </div>
 
-    <!--- ══ ADD MODAL ══ --->
+    <!--- ADD MODAL --->
     <div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -190,7 +194,7 @@
         </div>
     </div>
 
-    <!--- ══ EDIT MODAL ══ --->
+    <!---  EDIT MODAL  --->
     <div class="modal fade" id="editDepartmentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -551,12 +555,4 @@ $(document).ready(function () {
     });
 
 });
-</script>
-
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar   = document.querySelector('.sidebar-wrapper');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
 </script>

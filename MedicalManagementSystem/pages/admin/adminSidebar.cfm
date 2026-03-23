@@ -63,7 +63,7 @@
                     class="sidebar-link ">
                     <a href="/MedicalManagementSystem/pages/admin/manage_departments.cfm" class='sidebar-link'>
                         <i class="bi bi-building"></i>
-                        <span>Manage Departments</span>
+                        <span>Manage Department</span>
                     </a>
                 </li>
 
@@ -71,7 +71,7 @@
                     class="sidebar-link ">
                     <a href="/MedicalManagementSystem/pages/admin/manage_doctors.cfm" class='sidebar-link'>
                         <i class="bi bi-person-badge-fill"></i>
-                        <span>Manage Doctors</span>
+                        <span>Manage Doctor</span>
                     </a>
                 </li>
                 <li

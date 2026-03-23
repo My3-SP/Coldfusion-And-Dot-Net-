@@ -27,7 +27,7 @@
         white-space: nowrap;
     }
     #doctorTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #doctorTable tbody td {
         font-size: 15px;
@@ -56,6 +56,10 @@
         color: #4f46e5 !important;
         border: none !important;
         border-radius: 5px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
     }
     .dataTables_wrapper .dataTables_info {
         font-size: 13px;
@@ -125,7 +129,7 @@
                             <td>#encodeForHTML(email)#</td>
                             <td>#encodeForHTML(dept_name)#</td>
                             <td>#experience_years# yrs</td>
-                            <td>#consultation_fee#</td>
+                            <td><i class="bi bi-currency-rupee"></i>#consultation_fee#</td>
                             <td>
                                 <button class="btn btn-sm statusBtn
                                     <cfif is_active EQ 1>btn-success<cfelse>btn-danger</cfif>"
@@ -861,12 +865,4 @@ $(document).ready(function () {
     }
 
 });
-</script>
-
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar   = document.querySelector('.sidebar-wrapper');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
 </script>

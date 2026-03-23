@@ -29,7 +29,7 @@
         white-space: nowrap;
     }
     .dashboard-table tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     .dashboard-table tbody td {
         font-size: 15px;
@@ -244,11 +244,4 @@
             timerProgressBar:  true
         });
     }
-</script>
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar   = document.querySelector('.sidebar-wrapper');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
 </script>

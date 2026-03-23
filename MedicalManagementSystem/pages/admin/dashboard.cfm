@@ -26,7 +26,7 @@
         white-space: nowrap;
     }
     #usersTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #usersTable tbody td {
         font-size: 15px;
@@ -50,8 +50,12 @@
         border-radius: 5px;
         border: none !important;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 3px 10px !important;
+    margin: 0 !important;
+    }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background: #e0e7ff !important;
+        background: #c1cef771 !important;
         color: #4f46e5 !important;
         border: none !important;
         border-radius: 5px;
@@ -88,109 +92,108 @@
     </div>
 
     <cfoutput>
-    <div class="page-content">
+        <div class="page-content">
 
-        <!--- Stats Cards --->
-        <div class="row g-3">
-            <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-4">
-                        <div class="mb-1 text-muted medium"><b>Total Users</b></div>
-                        <h3 class="fw-bold text-primary mb-0">#qStats.totalUsers#</h3>
+            <!--- Stats Cards --->
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-4">
+                            <div class="mb-1 text-muted medium"><b>Total Users</b></div>
+                            <h3 class="fw-bold text-primary mb-0">#qStats.totalUsers#</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-4">
+                            <div class="mb-1 text-muted medium"><b>Total Doctors</b></div>
+                            <h3 class="fw-bold text-success mb-0">#qStats.totalDoctors#</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-4">
+                            <div class="mb-1 text-muted medium"><b>Total Patients</b></div>
+                            <h3 class="fw-bold text-warning mb-0">#qStats.totalPatients#</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center py-4">
+                            <div class="mb-1 text-muted medium"><b>Total Departments</b></div>
+                            <h3 class="fw-bold text-info mb-0">#qStats.totalDepartments#</h3>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-4">
-                        <div class="mb-1 text-muted medium"><b>Total Doctors</b></div>
-                        <h3 class="fw-bold text-success mb-0">#qStats.totalDoctors#</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-4">
-                        <div class="mb-1 text-muted medium"><b>Total Patients</b></div>
-                        <h3 class="fw-bold text-warning mb-0">#qStats.totalPatients#</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center py-4">
-                        <div class="mb-1 text-muted medium"><b>Total Departments</b></div>
-                        <h3 class="fw-bold text-info mb-0">#qStats.totalDepartments#</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!--- Users Table --->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body fw-semibold">
-                        <i class="bi bi-people me-2 text-primary"></i>Users List
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover align-middle"
-                                   id="usersTable">
-                                <thead>
-                                    <tr>
-                                        <th>SL NO</th>
-                                        <th>Username</th>
-                                        <th>Full Name</th>
-                                        <th>Role</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <cfset sl = 1>
-                                    <cfoutput query="qUsers">
-                                    <tr>
-                                        <td>#sl#</td>
-                                        <td>#encodeForHTML(username)#</td>
-                                        <td>#encodeForHTML(full_name)#</td>
-                                        <td>#encodeForHTML(role_name)#</td>
-                                        <td>#encodeForHTML(email)#</td>
-                                        <td>#encodeForHTML(phone)#</td>
-                                        <td>
-                                            <button class="btn btn-sm statusBtn
-                                                <cfif is_active EQ 1>btn-success<cfelse>btn-danger</cfif>"
-                                                data-userid="#securityService.encryptID(user_id)#"
-                                                data-status="<cfif is_active EQ 1>Active<cfelse>Inactive</cfif>">
-                                                <cfif is_active EQ 1>Active<cfelse>Inactive</cfif>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <cfif is_active EQ 1>
-                                                <button class="btn btn-primary btn-sm editBtn"
-                                                    data-enc_user_id="#securityService.encryptID(user_id)#"
-                                                    data-full_name="#encodeForHTMLAttribute(full_name)#"
-                                                    data-username="#encodeForHTMLAttribute(username)#"
-                                                    data-email="#encodeForHTMLAttribute(email)#"
-                                                    data-phone="#encodeForHTMLAttribute(phone)#">
-                                                    <i class="bi bi-pencil-square"></i> Edit
+            <!--- Users Table --->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body fw-semibold">
+                            <i class="bi bi-people me-2 text-primary"></i>Users List
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover align-middle"
+                                    id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SL NO</th>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Role</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <cfset sl = 1>
+                                        <cfoutput query="qUsers">
+                                        <tr>
+                                            <td>#sl#</td>
+                                            <td>#encodeForHTML(username)#</td>
+                                            <td>#encodeForHTML(full_name)#</td>
+                                            <td>#encodeForHTML(role_name)#</td>
+                                            <td>#encodeForHTML(email)#</td>
+                                            <td>#encodeForHTML(phone)#</td>
+                                            <td>
+                                                <button class="btn btn-sm statusBtn
+                                                    <cfif is_active EQ 1>btn-success<cfelse>btn-danger</cfif>"
+                                                    data-userid="#securityService.encryptID(user_id)#"
+                                                    data-status="<cfif is_active EQ 1>Active<cfelse>Inactive</cfif>">
+                                                    <cfif is_active EQ 1>Active<cfelse>Inactive</cfif>
                                                 </button>
-                                            </cfif>
-                                        </td>
-                                    </tr>
-                                    <cfset sl = sl + 1>
-                                    </cfoutput>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td>
+                                                <cfif is_active EQ 1>
+                                                    <button class="btn btn-primary btn-sm editBtn"
+                                                        data-enc_user_id="#securityService.encryptID(user_id)#"
+                                                        data-full_name="#encodeForHTMLAttribute(full_name)#"
+                                                        data-username="#encodeForHTMLAttribute(username)#"
+                                                        data-email="#encodeForHTMLAttribute(email)#"
+                                                        data-phone="#encodeForHTMLAttribute(phone)#">
+                                                        <i class="bi bi-pencil-square"></i> Edit
+                                                    </button>
+                                                </cfif>
+                                            </td>
+                                        </tr>
+                                        <cfset sl = sl + 1>
+                                        </cfoutput>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    </div>
     </cfoutput>
 </div>
 
@@ -296,7 +299,7 @@ $(document).ready(function () {
         };
     });
 
-    // ── DataTable ─
+    //  DataTable 
     var dt = $('#usersTable').DataTable({
         pageLength: 5,
         columnDefs: [{ orderable: false, targets: [6, 7] }],
@@ -311,7 +314,7 @@ $(document).ready(function () {
         }
     });
 
-    // ── SweetAlert2 helpers ───────────────────────────────
+    //  SweetAlert2 helpers 
     function swAlert(icon, title, text) {
         Swal.fire({
             icon:              icon,
@@ -323,7 +326,7 @@ $(document).ready(function () {
         });
     }
 
-    // ── Modal helpers ─────────────────────────────────────
+    //  Modal helpers 
     var modalEl       = document.getElementById('editUserModal');
     var modalInstance = new bootstrap.Modal(modalEl);
 
@@ -348,7 +351,7 @@ $(document).ready(function () {
     function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
     function validPhone(v) { return v.trim() === '' || /^[0-9]{10,15}$/.test(v.trim()); }
 
-    // ── Open Edit Modal ───────────────────────────────────
+    //  Open Edit Modal 
     $('#usersTable tbody').on('click', '.editBtn', function () {
         var userId = $(this).data('enc_user_id').toString();
         var u = userDataMap[userId];
@@ -370,7 +373,7 @@ $(document).ready(function () {
         resetBtn();
     });
 
-    // ── Submit Edit Form ──────────────────────────────────
+    //  Submit Edit Form 
     $('#editUserForm').on('submit', function (e) {
         e.preventDefault();
         clearErrors();
@@ -456,7 +459,7 @@ $(document).ready(function () {
         });
     });
 
-    // ── Toggle Status ─────────────────────────────────────
+    //  Toggle Status 
     $('#usersTable').on('click', '.statusBtn', function () {
         var $btn          = $(this);
         var encID         = $btn.data('userid');
@@ -532,10 +535,3 @@ $(document).ready(function () {
 });
 </script>
 
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar   = document.querySelector('.sidebar-wrapper');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
-</script>

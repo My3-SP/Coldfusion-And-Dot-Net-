@@ -135,11 +135,3 @@
 </cfoutput>
 
 <cfinclude template="../../includes/footer.cfm">
-
-<script>
-    const toggleBtn = document.getElementById('sidebarToggle');
-    const sidebar   = document.querySelector('.sidebar-wrapper');
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('hide-sidebar');
-    });
-</script>

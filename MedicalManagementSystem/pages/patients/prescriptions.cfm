@@ -40,7 +40,7 @@
         white-space: nowrap;
     }
     #prescriptionsTable tbody tr:hover {
-        background-color: #f0f0ff;
+        background-color: #c7d4ff4f;
     }
     #prescriptionsTable tbody td {
         font-size: 15px;
@@ -63,6 +63,10 @@
         color: #fff !important;
         border-radius: 5px;
         border: none !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 3px 10px !important;
+        margin: 0 !important;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
         background: #e0e7ff !important;
