@@ -108,254 +108,254 @@
 <cfinclude template="../includes/footer.cfm">
 
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
 
-    var userEmail = '';
-    var CFC_URL   = '/MedicalManagementSystem/components/forgotPasswordService.cfc';
+        var userEmail = '';
+        var CFC_URL   = '/MedicalManagementSystem/components/forgotPasswordService.cfc';
 
-    function swAlert(icon, title, text) {
-        return Swal.fire({
-            icon:               icon,
-            title:              title,
-            text:               text,
-            confirmButtonColor: '#0d6efd',
-            timer:              icon === 'success' ? 2500 : undefined,
-            timerProgressBar:   icon === 'success'
-        });
-    }
-
-    function startBtn(btnId, spinnerId, textId, label) {
-        $('#' + textId).text(label);
-        $('#' + spinnerId).removeClass('d-none');
-        $('#' + btnId).prop('disabled', true);
-    }
-
-    function resetBtn(btnId, spinnerId, textId, label) {
-        $('#' + textId).text(label);
-        $('#' + spinnerId).addClass('d-none');
-        $('#' + btnId).prop('disabled', false);
-    }
-
-    //  Step 1: Send OTP 
-    $('#sendOTPForm').on('submit', function (e) {
-        e.preventDefault();
-
-        var email = $('#emailInput').val().trim();
-        $('#emailInput').removeClass('is-invalid');
-        $('#emailErr').text('');
-
-        if (!email) {
-            $('#emailInput').addClass('is-invalid');
-            $('#emailErr').text('Email is required.');
-            return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            $('#emailInput').addClass('is-invalid');
-            $('#emailErr').text('Please enter a valid email address.');
-            return;
+        function swAlert(icon, title, text) {
+            return Swal.fire({
+                icon:               icon,
+                title:              title,
+                text:               text,
+                confirmButtonColor: '#0d6efd',
+                timer:              icon === 'success' ? 2500 : undefined,
+                timerProgressBar:   icon === 'success'
+            });
         }
 
-        userEmail = email;
-        startBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Sending...');
+        function startBtn(btnId, spinnerId, textId, label) {
+            $('#' + textId).text(label);
+            $('#' + spinnerId).removeClass('d-none');
+            $('#' + btnId).prop('disabled', true);
+        }
 
-        $.ajax({
-            url:      CFC_URL + '?method=sendPasswordResetOTP&returnformat=json',
-            type:     'POST',
-            dataType: 'json',
-            data:     { email: email },
-            success: function (res) {
-                resetBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Send OTP');
-                var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
-                var msg = res.MESSAGE || res.message || '';
+        function resetBtn(btnId, spinnerId, textId, label) {
+            $('#' + textId).text(label);
+            $('#' + spinnerId).addClass('d-none');
+            $('#' + btnId).prop('disabled', false);
+        }
 
-                if (!ok) {
-                    $('#emailInput').addClass('is-invalid');
-                    $('#emailErr').text(msg);
-                    return;
-                }
+        //  Step 1: Send OTP 
+        $('#sendOTPForm').on('submit', function (e) {
+            e.preventDefault();
 
-                $('#otpSubtitle').text('OTP sent to ' + email + '. Valid for 10 minutes.');
-                $('#step1').addClass('d-none');
-                $('#step2').removeClass('d-none');
-            },
-            error: function () {
-                resetBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Send OTP');
-                swAlert('error','Server Error','Something went wrong. Please try again.');
+            var email = $('#emailInput').val().trim();
+            $('#emailInput').removeClass('is-invalid');
+            $('#emailErr').text('');
+
+            if (!email) {
+                $('#emailInput').addClass('is-invalid');
+                $('#emailErr').text('Email is required.');
+                return;
             }
-        });
-    });
-
-    //  Step 2: Verify OTP 
-    $('#verifyOTPForm').on('submit', function (e) {
-        e.preventDefault();
-
-        var otp = $('#otpInput').val().trim();
-        $('#otpInput').removeClass('is-invalid');
-        $('#otpErr').text('');
-
-        if (!otp || !/^\d{6}$/.test(otp)) {
-            $('#otpInput').addClass('is-invalid');
-            $('#otpErr').text('Please enter the 6-digit OTP.');
-            return;
-        }
-
-        startBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verifying...');
-
-        $.ajax({
-            url:      CFC_URL + '?method=verifyPasswordResetOTP&returnformat=json',
-            type:     'POST',
-            dataType: 'json',
-            data:     { email: userEmail, otp: otp },
-            success: function (res) {
-                resetBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verify OTP');
-                var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
-                var msg = res.MESSAGE || res.message || '';
-
-                if (!ok) {
-                    $('#otpInput').addClass('is-invalid');
-                    $('#otpErr').text(msg);
-                    return;
-                }
-
-                $('#step2').addClass('d-none');
-                $('#step3').removeClass('d-none');
-            },
-            error: function () {
-                resetBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verify OTP');
-                swAlert('error','Server Error','Something went wrong. Please try again.');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                $('#emailInput').addClass('is-invalid');
+                $('#emailErr').text('Please enter a valid email address.');
+                return;
             }
-        });
-    });
 
-    //  Resend OTP 
-    $('#resendOtpBtn').on('click', function () {
-        $('#otpInput').val('').removeClass('is-invalid');
-        $('#otpErr').text('');
-        $('#resendOtpBtn').prop('disabled', true).text('Sending...');
+            userEmail = email;
+            startBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Sending...');
 
-        $.ajax({
-            url:      CFC_URL + '?method=sendPasswordResetOTP&returnformat=json',
-            type:     'POST',
-            dataType: 'json',
-            data:     { email: userEmail },
-            success: function (res) {
-                $('#resendOtpBtn').prop('disabled', false).text('Resend OTP');
-                var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
-                var msg = res.MESSAGE || res.message || '';
+            $.ajax({
+                url:      CFC_URL + '?method=sendPasswordResetOTP&returnformat=json',
+                type:     'POST',
+                dataType: 'json',
+                data:     { email: email },
+                success: function (res) {
+                    resetBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Send OTP');
+                    var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
+                    var msg = res.MESSAGE || res.message || '';
 
-                if (ok) {
-                    swAlert('success','OTP Resent','A new OTP has been sent to ' + userEmail + '.');
-                } else {
-                    swAlert('error','Failed', msg || 'Could not resend OTP.');
+                    if (!ok) {
+                        $('#emailInput').addClass('is-invalid');
+                        $('#emailErr').text(msg);
+                        return;
+                    }
+
+                    $('#otpSubtitle').text('OTP sent to ' + email + '. Valid for 10 minutes.');
+                    $('#step1').addClass('d-none');
+                    $('#step2').removeClass('d-none');
+                },
+                error: function () {
+                    resetBtn('sendOtpBtn','sendOtpSpinner','sendOtpBtnText','Send OTP');
+                    swAlert('error','Server Error','Something went wrong. Please try again.');
                 }
-            },
-            error: function () {
-                $('#resendOtpBtn').prop('disabled', false).text('Resend OTP');
-                swAlert('error','Server Error','Something went wrong. Please try again.');
-            }
+            });
         });
-    });
 
-    //  Step 3: Reset Password 
-    $('#resetPasswordForm').on('submit', function (e) {
-        e.preventDefault();
+        //  Step 2: Verify OTP 
+        $('#verifyOTPForm').on('submit', function (e) {
+            e.preventDefault();
 
-        var newPass     = $('#newPassInput').val();
-        var confirmPass = $('#confirmPassInput').val();
-        var ok          = true;
+            var otp = $('#otpInput').val().trim();
+            $('#otpInput').removeClass('is-invalid');
+            $('#otpErr').text('');
 
-        $('#newPassInput, #confirmPassInput').removeClass('is-invalid');
-        $('#newPassErr, #confirmPassErr').text('');
+            if (!otp || !/^\d{6}$/.test(otp)) {
+                $('#otpInput').addClass('is-invalid');
+                $('#otpErr').text('Please enter the 6-digit OTP.');
+                return;
+            }
 
-        if (!newPass) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('New password is required.');
-            ok = false;
-        } else if (newPass.length < 6) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must be at least 6 characters.');
-            ok = false;
-        } else if (!/[A-Z]/.test(newPass)) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must contain at least one uppercase letter.');
-            ok = false;
-        } else if (!/[a-z]/.test(newPass)) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must contain at least one lowercase letter.');
-            ok = false;
-        } else if (!/[0-9]/.test(newPass)) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must contain at least one number.');
-            ok = false;
-        } else if (!/[!@##$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPass)) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must contain at least one special character (!@#$%^&*).');
-            ok = false;
-        } else if (newPass.length > 64) {
-            $('#newPassInput').addClass('is-invalid');
-            $('#newPassErr').text('Password must not exceed 64 characters.');
-            ok = false;
-        }
+            startBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verifying...');
 
-        if (!confirmPass) {
-            $('#confirmPassInput').addClass('is-invalid');
-            $('#confirmPassErr').text('Please confirm your password.');
-            ok = false;
-        } else if (newPass !== confirmPass) {
-            $('#confirmPassInput').addClass('is-invalid');
-            $('#confirmPassErr').text('Passwords do not match.');
-            ok = false;
-        }
+            $.ajax({
+                url:      CFC_URL + '?method=verifyPasswordResetOTP&returnformat=json',
+                type:     'POST',
+                dataType: 'json',
+                data:     { email: userEmail, otp: otp },
+                success: function (res) {
+                    resetBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verify OTP');
+                    var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
+                    var msg = res.MESSAGE || res.message || '';
 
-        if (!ok) return;
+                    if (!ok) {
+                        $('#otpInput').addClass('is-invalid');
+                        $('#otpErr').text(msg);
+                        return;
+                    }
 
-        startBtn('resetBtn','resetSpinner','resetBtnText','Resetting...');
-
-        $.ajax({
-            url:      CFC_URL + '?method=resetPassword&returnformat=json',
-            type:     'POST',
-            dataType: 'json',
-            data:     { email: userEmail, new_password: newPass },
-            success: function (res) {
-                resetBtn('resetBtn','resetSpinner','resetBtnText','Reset Password');
-                var success = res.SUCCESS === true || res.SUCCESS === 'true';
-                var msg     = res.MESSAGE || res.message || '';
-
-                if (!success) {
-                    swAlert('error','Failed', msg || 'Could not reset password.');
-                    return;
+                    $('#step2').addClass('d-none');
+                    $('#step3').removeClass('d-none');
+                },
+                error: function () {
+                    resetBtn('verifyOtpBtn','verifyOtpSpinner','verifyOtpBtnText','Verify OTP');
+                    swAlert('error','Server Error','Something went wrong. Please try again.');
                 }
-
-                Swal.fire({
-                    icon:               'success',
-                    title:              'Password Reset!',
-                    text:               'Redirecting to login...',
-                    confirmButtonColor: '#0d6efd',
-                    timer:              2000,
-                    timerProgressBar:   true,
-                    showConfirmButton:  false
-                }).then(function () {
-                    window.location.href = '/MedicalManagementSystem/pages/login.cfm';
-                });
-            },
-            error: function () {
-                resetBtn('resetBtn','resetSpinner','resetBtnText','Reset Password');
-                swAlert('error','Server Error','Something went wrong. Please try again.');
-            }
+            });
         });
-    });
 
-    // Only digits in OTP
-    $('#otpInput').on('input', function () {
-        $(this).val($(this).val().replace(/[^0-9]/g, ''));
-        $(this).removeClass('is-invalid');
-        $('#otpErr').text('');
-    });
+        //  Resend OTP 
+        $('#resendOtpBtn').on('click', function () {
+            $('#otpInput').val('').removeClass('is-invalid');
+            $('#otpErr').text('');
+            $('#resendOtpBtn').prop('disabled', true).text('Sending...');
 
-    $('#emailInput').on('input', function () {
-        $(this).removeClass('is-invalid');
-        $('#emailErr').text('');
-    });
+            $.ajax({
+                url:      CFC_URL + '?method=sendPasswordResetOTP&returnformat=json',
+                type:     'POST',
+                dataType: 'json',
+                data:     { email: userEmail },
+                success: function (res) {
+                    $('#resendOtpBtn').prop('disabled', false).text('Resend OTP');
+                    var ok  = res.SUCCESS === true || res.SUCCESS === 'true';
+                    var msg = res.MESSAGE || res.message || '';
 
-});
+                    if (ok) {
+                        swAlert('success','OTP Resent','A new OTP has been sent to ' + userEmail + '.');
+                    } else {
+                        swAlert('error','Failed', msg || 'Could not resend OTP.');
+                    }
+                },
+                error: function () {
+                    $('#resendOtpBtn').prop('disabled', false).text('Resend OTP');
+                    swAlert('error','Server Error','Something went wrong. Please try again.');
+                }
+            });
+        });
+
+        //  Step 3: Reset Password 
+        $('#resetPasswordForm').on('submit', function (e) {
+            e.preventDefault();
+
+            var newPass     = $('#newPassInput').val();
+            var confirmPass = $('#confirmPassInput').val();
+            var ok          = true;
+
+            $('#newPassInput, #confirmPassInput').removeClass('is-invalid');
+            $('#newPassErr, #confirmPassErr').text('');
+
+            if (!newPass) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('New password is required.');
+                ok = false;
+            } else if (newPass.length < 6) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must be at least 6 characters.');
+                ok = false;
+            } else if (!/[A-Z]/.test(newPass)) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must contain at least one uppercase letter.');
+                ok = false;
+            } else if (!/[a-z]/.test(newPass)) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must contain at least one lowercase letter.');
+                ok = false;
+            } else if (!/[0-9]/.test(newPass)) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must contain at least one number.');
+                ok = false;
+            } else if (!/[!@##$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPass)) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must contain at least one special character (!@#$%^&*).');
+                ok = false;
+            } else if (newPass.length > 64) {
+                $('#newPassInput').addClass('is-invalid');
+                $('#newPassErr').text('Password must not exceed 64 characters.');
+                ok = false;
+            }
+
+            if (!confirmPass) {
+                $('#confirmPassInput').addClass('is-invalid');
+                $('#confirmPassErr').text('Please confirm your password.');
+                ok = false;
+            } else if (newPass !== confirmPass) {
+                $('#confirmPassInput').addClass('is-invalid');
+                $('#confirmPassErr').text('Passwords do not match.');
+                ok = false;
+            }
+
+            if (!ok) return;
+
+            startBtn('resetBtn','resetSpinner','resetBtnText','Resetting...');
+
+            $.ajax({
+                url:      CFC_URL + '?method=resetPassword&returnformat=json',
+                type:     'POST',
+                dataType: 'json',
+                data:     { email: userEmail, new_password: newPass },
+                success: function (res) {
+                    resetBtn('resetBtn','resetSpinner','resetBtnText','Reset Password');
+                    var success = res.SUCCESS === true || res.SUCCESS === 'true';
+                    var msg     = res.MESSAGE || res.message || '';
+
+                    if (!success) {
+                        swAlert('error','Failed', msg || 'Could not reset password.');
+                        return;
+                    }
+
+                    Swal.fire({
+                        icon:               'success',
+                        title:              'Password Reset!',
+                        text:               'Redirecting to login...',
+                        confirmButtonColor: '#0d6efd',
+                        timer:              2000,
+                        timerProgressBar:   true,
+                        showConfirmButton:  false
+                    }).then(function () {
+                        window.location.href = '/MedicalManagementSystem/pages/login.cfm';
+                    });
+                },
+                error: function () {
+                    resetBtn('resetBtn','resetSpinner','resetBtnText','Reset Password');
+                    swAlert('error','Server Error','Something went wrong. Please try again.');
+                }
+            });
+        });
+
+        // Only digits in OTP
+        $('#otpInput').on('input', function () {
+            $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            $(this).removeClass('is-invalid');
+            $('#otpErr').text('');
+        });
+
+        $('#emailInput').on('input', function () {
+            $(this).removeClass('is-invalid');
+            $('#emailErr').text('');
+        });
+
+    });
 </script>

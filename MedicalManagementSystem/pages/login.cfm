@@ -120,21 +120,21 @@
 <cfinclude template="../includes/footer.cfm">
 
 <cfoutput>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        <cfif len(trim(logoutMsg))>
-            Swal.fire({
-                toast:             true,
-                icon:              "success",
-                title:             "#logoutMsg#",
-                position:          "top-end",
-                showConfirmButton: false,
-                timer:             4000,
-                timerProgressBar:  true
-            });
-        </cfif>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            <cfif len(trim(logoutMsg))>
+                Swal.fire({
+                    toast:             true,
+                    icon:              "success",
+                    title:             "#logoutMsg#",
+                    position:          "top-end",
+                    showConfirmButton: false,
+                    timer:             4000,
+                    timerProgressBar:  true
+                });
+            </cfif>
 
-    });
-</script>
+        });
+    </script>
 </cfoutput>
 

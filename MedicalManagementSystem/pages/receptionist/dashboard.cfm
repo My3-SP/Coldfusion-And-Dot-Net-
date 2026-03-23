@@ -192,28 +192,22 @@
             timerProgressBar:  true
         });
     }
-</script>
-<script>
-$(document).ready(function () {
-    $('#todayAppointmentsTable').DataTable({
-        pageLength: 5,
-        order:      [[3, 'asc']],
-        columnDefs: [{ orderable: false, targets: [4] }],
-        language: {
-            emptyTable: 'No appointments scheduled for today.',
-            search:     '<i class="bi bi-search me-1"></i>Search:',
-            lengthMenu: 'Show _MENU_ entries',
-            info:       'Showing _START_ to _END_ of _TOTAL_ appointments',
-            paginate: {
-                previous: '&lsaquo;',
-                next:     '&rsaquo;'
+    $(document).ready(function () {
+        $('#todayAppointmentsTable').DataTable({
+            pageLength: 5,
+            order:      [[3, 'asc']],
+            columnDefs: [{ orderable: false, targets: [4] }],
+            language: {
+                emptyTable: 'No appointments scheduled for today.',
+                search:     '<i class="bi bi-search me-1"></i>Search:',
+                lengthMenu: 'Show _MENU_ entries',
+                info:       'Showing _START_ to _END_ of _TOTAL_ appointments',
+                paginate: {
+                    previous: '&lsaquo;',
+                    next:     '&rsaquo;'
+                }
             }
-        }
+        });
     });
-});
 
-<<<<<<< HEAD
 </script>
-=======
-</script>
->>>>>>> 51a396c4c9b7cacef41c7fd89e382d7c368b3cbe
