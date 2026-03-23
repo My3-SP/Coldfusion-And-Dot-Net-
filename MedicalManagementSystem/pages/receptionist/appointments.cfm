@@ -106,7 +106,7 @@
         <cfset structDelete(session,"successMessage")>
     </cfif>
 
-    <!--- ── BOOK / EDIT FORM ─────────────────────────────────────────── --->
+    <!---  BOOK / EDIT FORM  --->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body fw-semibold">
             <i class="bi bi-calendar-plus me-2 text-primary"></i>
@@ -277,7 +277,7 @@ $(document).ready(function () {
     var BASE        = '/MedicalManagementSystem/components/ReceptionistDashboardService.cfc';
     var selectedRow = null;
 
-    // ── Generate 30-min time slots ────────────────────────
+    //  Generate 30-min time slots 
     function buildTimeSlots(selectedVal) {
         var opts = '<option value=""> Select Time </option>';
         for (var h = 0; h < 24; h++) {
@@ -296,10 +296,10 @@ $(document).ready(function () {
 
     $('#appointmentTime').html(buildTimeSlots(''));
 
-    // ── Min date = today ──────────────────────────────────
+    // Min date = today 
     $('#appointmentDate').attr('min', new Date().toISOString().split('T')[0]);
 
-    // ── SweetAlert2 helper ────────────────────────────────
+    //SweetAlert2 helper 
     function swAlert(icon, title, text) {
         return Swal.fire({
             icon:               icon,
@@ -324,14 +324,14 @@ $(document).ready(function () {
         });
     }
 
-    // ── Clear inline errors ───────────────────────────────
+    //  Clear inline errors 
     function clearErrors() {
         $('#patientError,#doctorError,#dateError,#timeError').text('');
         $('#patientID,#doctorID,#appointmentDate,#appointmentTime')
             .removeClass('is-invalid');
     }
 
-    // ── DataTable ─────────────────────────────────────────
+    //  DataTable
     var table = $('#appointmentsTable').DataTable({
         pageLength:  5,
         order:       [[3, 'asc']],
@@ -358,7 +358,7 @@ $(document).ready(function () {
              });
     }).draw();
 
-    // ── Form submit (Book / Update) ───────────────────────
+    // Form submit (Book / Update) 
     $('#appointmentForm').on('submit', function (e) {
         e.preventDefault();
         clearErrors();
@@ -597,7 +597,7 @@ $(document).ready(function () {
 
 });
 
-//  Edit appointment (outside ready — called from inline) 
+//  Edit appointment
 function editAppointment(id, patient, doctor, date, time, remarks) {
     if (!id) {
         Swal.fire({
@@ -647,19 +647,18 @@ function resetForm() {
     $('#appointmentForm')[0].reset();
     $('#appointmentID').val('');
 
-    // Rebuild blank slots
-    var opts = '<option value="">— Select Time —</option>';
+    var opts = '<option value="">Select Time</option>';
     for (var h = 0; h < 24; h++) {
         ['00', '30'].forEach(function (m) {
-            var hh  = (h < 10 ? '0' : '') + h;
-            var val = hh + ':' + m;
-            var ampm = h < 12 ? 'AM' : 'PM';
-            var h12  = h % 12 === 0 ? 12 : h % 12;
+            var hh    = (h < 10 ? '0' : '') + h;
+            var val   = hh + ':' + m;
+            var ampm  = h < 12 ? 'AM' : 'PM';
+            var h12   = h % 12 === 0 ? 12 : h % 12;
             var label = (h12 < 10 ? '0' : '') + h12 + ':' + m + ' ' + ampm;
             opts += '<option value="' + val + '">' + label + '</option>';
         });
     }
-    $('#appointmentTime').html('<option value="">— Select Time —</option>' + opts);
+    $('#appointmentTime').html(opts);
 
     $('#submitBtn')
         .data('action', 'bookAppointment')
